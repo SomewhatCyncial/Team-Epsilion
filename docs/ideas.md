@@ -9,7 +9,9 @@ Security analysis / Enumeration Tool
 Team Overview
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
- Bryan Kazunas GitHub: BryanKazunas,  Alexander Pratt GitHub: SomewhatCynical, Wenxiao Zeng GitHub: wzeng-01
+ Bryan Kazunas GitHub: BryanKazunas
+ Alexander Pratt GitHub: SomewhatCynical
+ Wenxiao Zeng GitHub: wzeng-01
  
 Innovative Idea
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
