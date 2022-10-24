@@ -51,3 +51,21 @@ The next image is a wireframe mockup of our host data page. Following a scan, a 
 The final image is a wireframe mockup of the login page for the site. This is a simple login page, displaying a users profile picture, as well as the having a prompt for username and password. 
 
 ![login_wireframe](/images/login_wireframe.JPG)
+
+
+Division of Labor
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Alex
+- Wrtoe final draft for ideas.md
+- Wrote Slack post for "Project Ideas"
+- Drew the site wireframe mockup
+- Created and coded Enumeration Machnine - Host Data.html
+- Wrote milestone-1.md
+- Posted milestone-1 github release
+
+Bryan
+- 
+
+Wenxio
+- 
