@@ -57,7 +57,7 @@ Division of Labor
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Alex
-- Wrtoe final draft for ideas.md
+- Wrote final draft for ideas.md
 - Wrote Slack post for "Project Ideas"
 - Drew the site wireframe mockup
 - Created and coded Enumeration Machnine - Host Data.html
