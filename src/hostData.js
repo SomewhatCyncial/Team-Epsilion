@@ -2,7 +2,7 @@ const url = "https://epsilon-enumeration.herokuapp.com/";
 
 async function requestHostList()
 {  
-    const response = await fetch(url + '/hostList')
+    const response = await fetch(url + '/HostData/hostList')
 
     if(response.ok) {
         const hostJson = await response.json(); //returns JSON object list of hostnames (i.e. {Workstation_1: 0, Workstation_2: 0, ....}) Number values are arbitary
@@ -10,6 +10,7 @@ async function requestHostList()
         return hostList;
     } else {
         //error handling
+        window.alert("failed to return hostList")
     }
 }
 
@@ -20,13 +21,14 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch(url + '/hostData/' + hostname);
+    const response = await fetch(url + '/HostData/:' + hostname);
 
     if(response.ok) {
         const hostJson = await response.json();
         return hostJson;
     } else {
         //error handling
+        window.alert("failed to return hostData")
     }
 }
 
@@ -44,5 +46,7 @@ document.getElementById('selectHost').addEventListener('change', () => {
 
     let vulnSeverity = document.getElementById("vulnSeverity");
 
-    vulnSeverity.innerText = JSON.stringify(hostData);
+    console.log(hostData);
+
+    vulnSeverity.innerText = JSON.parse(hostData);
 });

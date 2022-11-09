@@ -1,59 +1,77 @@
 const fs = require("fs/promises");
 const express = require("express");
+const bodyParser= require('body-parser')
+const {MongoClient} = require('mongodb');
+const { Console } = require("console");
 
 const server = express();
+server.use(express.static(__dirname + '/public')); //allows import of .css files
 
-server.use(express.static(__dirname + '/public'));
+const uri = "mongodb+srv://TeamEpsilon:qeRbSxbrBo1icaxl@cluster0.3kmj7nn.mongodb.net/?retryWrites=true&w=majority";
 
-server.get('/', (req , res) => {
-    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
-});
+const client = new MongoClient(uri);
+try{
+    await client.connect()
+    .then( client => {
+        console.log("Connected to Database")
+        const db = client.db('enumeration-machine')
+        const hostCollection = db.collection('hosts')
 
-server.get('/EnumerationMachine', (req , res) => {
-    res.sendFile(__dirname + '/html/EnumerationMachine.html');
-});
+        //Login Page
+        server.get('/', (req , res) => {
+            res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+        });
 
-server.get('/results', (req , res) => {
-    res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
-});
+        //Home Page
+        server.get('/EnumerationMachine', (req , res) => {
+            res.sendFile(__dirname + '/html/EnumerationMachine.html');
+        });
 
-server.get("/hostList", (req, res) => {
-    window.alert("{Host_1: 0, Host_2: 0, Host_3: 0}");
-    res.json({Host_1: 0, Host_2: 0, Host_3: 0}); //hard coded response to take place of dynamic data until implemented
+        //Host Data Page
+        server.get('/HostData', (req , res) => {
+            res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
+        });
 
-});
+        //Host Data Page: Returns list of hosts in db
+        server.get("/HostData/hostList", (req, res) => {
+            let data = JSON.stringify(db.collection('hosts').find().toArray());
+            res.send(data);
+        });
 
-server.get("/hostData/:hostname", async (req, res) => { 
-    const hostName = req.params.hostname;
-    let data;
+        //Host Data Page: Returns data for specific host in db
+        server.get("/HostData/:hostname", async (req, res) => { 
+            const hostName = req.params.hostname;
+            let data = JSON.stringify(db.collection('hosts').find(hostname));
+            res.send(data);
+        });
 
-    try{
-        data = await fs.readFile(__dirname +  'data/hostData/' + hostname + '.txt', "utf-8");
-    } catch {
-        //error handling
-    }
+        //Host Data Page: Removes specific host from db
+        server.post("/HostData/removeHost", async (req, res) => {
 
-    window.alert("{Host_1: 0, Host_2: 0, Host_3: 0}");
-    res.json({ 
-        
-        data 
-    });
+            hostCollection.deleteOne(
+                {hostname: req.body.hostname}
+            )
+            .then(result => {
+                if (result.deletedCount === 0) {
+                  return res.json('No host to delete');
+                }
+                res.json('Deleted Host');
+              })
+              .catch(error => console.error(error))
+        });
+    })
 
-});
+    server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+}
+catch(err){
+    console.error(err);
+}
+finally{
+    await client.close();
+}
 
-server.post("/removeHost", async (req, res) => {
 
-    const removeHost = req.body.content;
 
-    if(!content)
-        //error handling
-    
-    //Implement code to remove host from database
-    fs.unlink('data/hostData/' + content + '.txt')
-    window.alert("removed host")
 
-    
-    res.send("Host Removed");
-});
-server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+
 

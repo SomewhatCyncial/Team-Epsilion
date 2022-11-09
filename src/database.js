@@ -9,7 +9,10 @@ async function main() {
 
     const client = new MongoClient(uri);
     try{
-        await client.connect();
+        await client.connect()
+        .then( client => {
+            const db = client.db('enumeration-machine')
+        })
     }
     catch(err){
         console.error(err);
