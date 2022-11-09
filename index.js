@@ -3,7 +3,7 @@ const express = require("express");
 
 const server = express();
 
-app.use(express.static(__dirname + '/public'));
+server.use(express.static(__dirname + '/public'));
 
 server.get('/', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
