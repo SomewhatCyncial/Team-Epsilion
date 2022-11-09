@@ -47,5 +47,5 @@ server.post("/removeHost", async (req, res) => {
     
     res.send("Host Removed");
 });
-server.listen(8080, () => console.log("Server is running"));
+server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
 
