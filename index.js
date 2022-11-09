@@ -11,7 +11,7 @@ const uri = "mongodb+srv://TeamEpsilon:qeRbSxbrBo1icaxl@cluster0.3kmj7nn.mongodb
 
 const client = new MongoClient(uri);
 try{
-    await client.connect()
+    client.connect()
     .then( client => {
         console.log("Connected to Database")
         const db = client.db('enumeration-machine')

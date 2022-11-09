@@ -9,7 +9,7 @@ async function requestHostList()
         let hostList = Object.keys(hostJson);
         return hostList;
     } else {
-        //error handling
+        //error handling to be implemented
         window.alert("failed to return hostList")
     }
 }
@@ -27,7 +27,7 @@ async function requestHostData(hostname)
         const hostJson = await response.json();
         return hostJson;
     } else {
-        //error handling
+        //error handling to be implemented
         window.alert("failed to return hostData")
     }
 }
