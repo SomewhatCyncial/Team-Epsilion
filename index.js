@@ -18,7 +18,7 @@ server.get("/hostData/:hostname", async (req, res) => {
         //error handling
     }
 
-    req.json({ 
+    res.json({ 
         data 
     });
 
