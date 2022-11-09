@@ -3,6 +3,18 @@ const express = require("express");
 
 const server = express();
 
+server.get('/', (req , res) => {
+    res.sendFile('EnumerationMachine_Login.html');
+  });
+
+server.get('/EnumerationMachine', (req , res) => {
+    res.sendFile('EnumerationMachine.html');
+});
+
+server.get('/results', (req , res) => {
+    res.sendFile('EnumerationMachine.html');
+});
+
 server.get("/hostList", (req, res) => {
     res.json({Host_1: 0, Host_2: 0, Host_3: 0}); //hard coded response to take place of dynamic data
 
