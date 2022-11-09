@@ -4,15 +4,15 @@ const express = require("express");
 const server = express();
 
 server.get('/', (req , res) => {
-    res.sendFile('EnumerationMachine_Login.html');
+    res.sendFile('/EnumerationMachine_Login.html');
   });
 
 server.get('/EnumerationMachine', (req , res) => {
-    res.sendFile('EnumerationMachine.html');
+    res.sendFile('/EnumerationMachine.html');
 });
 
 server.get('/results', (req , res) => {
-    res.sendFile('EnumerationMachine.html');
+    res.sendFile('/EnumerationMachine.html');
 });
 
 server.get("/hostList", (req, res) => {
