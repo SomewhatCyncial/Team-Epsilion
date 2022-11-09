@@ -1,8 +1,6 @@
 const fs = require("fs/promises");
 const express = require("express");
 
-server.use(express.static(__dirname + '/public'));
-
 const server = express();
 
 server.get('/', (req , res) => {
