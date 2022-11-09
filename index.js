@@ -67,7 +67,7 @@ catch(err){
     console.error(err);
 }
 finally{
-    await client.close();
+    client.close();
 }
 
 
