@@ -4,7 +4,6 @@ const express = require("express");
 const server = express();
 
 server.use(express.static(__dirname + '/public'));
-server.use(express.static(__dirname + '/images'));
 
 server.get('/', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
