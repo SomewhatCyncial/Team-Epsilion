@@ -4,15 +4,15 @@ const express = require("express");
 const server = express();
 
 server.get('/', (req , res) => {
-    res.sendFile(' SomewhatCyncial/Team-Epsilon/EnumerationMachine_LoginPage.html');
+    res.sendFile(__dirname + '/EnumerationMachine_LoginPage.html');
   });
 
 server.get('/EnumerationMachine', (req , res) => {
-    res.sendFile(' SomewhatCyncial/Team-Epsilon/EnumerationMachine.html');
+    res.sendFile(__dirname + '/EnumerationMachine.html');
 });
 
 server.get('/results', (req , res) => {
-    res.sendFile(' SomewhatCyncial/Team-Epsilon/EnumerationMachine - Host Data.html');
+    res.sendFile(__dirname +  '/EnumerationMachine - Host Data.html');
 });
 
 server.get("/hostList", (req, res) => {
@@ -25,7 +25,7 @@ server.get("/hostData/:hostname", async (req, res) => {
     let data;
 
     try{
-        data = await fs.readFile('data/hostData/$(hostName).txt', "utf-8");
+        data = await fs.readFile(__dirname +  'data/hostData/$(hostName).txt', "utf-8");
     } catch {
         //error handling
     }
