@@ -18,7 +18,8 @@ server.get('/results', (req , res) => {
 });
 
 server.get("/hostList", (req, res) => {
-    res.json({Host_1: 0, Host_2: 0, Host_3: 0}); //hard coded response to take place of dynamic data
+    window.alert("{Host_1: 0, Host_2: 0, Host_3: 0}");
+    res.json({Host_1: 0, Host_2: 0, Host_3: 0}); //hard coded response to take place of dynamic data until implemented
 
 });
 
@@ -27,12 +28,14 @@ server.get("/hostData/:hostname", async (req, res) => {
     let data;
 
     try{
-        data = await fs.readFile(__dirname +  'data/hostData/$(hostName).txt', "utf-8");
+        data = await fs.readFile(__dirname +  'data/hostData/' + hostname + '.txt', "utf-8");
     } catch {
         //error handling
     }
 
+    window.alert("{Host_1: 0, Host_2: 0, Host_3: 0}");
     res.json({ 
+        
         data 
     });
 
@@ -46,6 +49,9 @@ server.post("/removeHost", async (req, res) => {
         //error handling
     
     //Implement code to remove host from database
+    fs.unlink('data/hostData/' + content + '.txt')
+    window.alert("removed host")
+
     
     res.send("Host Removed");
 });

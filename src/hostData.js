@@ -1,6 +1,8 @@
+const url = "https://epsilon-enumeration.herokuapp.com/";
+
 async function requestHostList()
 {  
-    const response = await fetch('/hostList')
+    const response = await fetch(url + '/hostList')
 
     if(response.ok) {
         const hostJson = await response.json(); //returns JSON object list of hostnames (i.e. {Workstation_1: 0, Workstation_2: 0, ....}) Number values are arbitary
@@ -18,7 +20,7 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch('/hostData/' + hostname);
+    const response = await fetch(url + '/hostData/' + hostname);
 
     if(response.ok) {
         const hostJson = await response.json();
