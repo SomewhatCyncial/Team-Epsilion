@@ -4,7 +4,7 @@ const express = require("express");
 const server = express();
 
 server.get('/', (req , res) => {
-    res.sendFile('/EnumerationMachine_Login.html');
+    res.sendFile('/EnumerationMachine_LoginPage.html');
   });
 
 server.get('/EnumerationMachine', (req , res) => {
