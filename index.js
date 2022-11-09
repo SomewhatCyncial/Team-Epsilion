@@ -12,7 +12,7 @@ server.get('/EnumerationMachine', (req , res) => {
 });
 
 server.get('/results', (req , res) => {
-    res.sendFile('/EnumerationMachine.html');
+    res.sendFile('/EnumerationMachine - Host Data.html');
 });
 
 server.get("/hostList", (req, res) => {
