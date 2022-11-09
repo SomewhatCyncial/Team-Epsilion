@@ -14,6 +14,7 @@ var server = http.createServer(function(request, response) {
             response.write("This is Test Message.");  
             response.end();  
             break;
+        // Login Page
         case '/login':
             fs.readFile('./EnumerationMachine_LoginPage.html',function(error,data){
                 if (error) {  
@@ -30,6 +31,7 @@ var server = http.createServer(function(request, response) {
             });
             break;
         
+        // Calling the main.css file
         case '/main.css':
             fs.readFile('./main.css',function(error,data){
                 if (error) {  
