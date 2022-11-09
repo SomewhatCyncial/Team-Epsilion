@@ -1,18 +1,20 @@
 const fs = require("fs/promises");
 const express = require("express");
 
+server.use(express.static(__dirname + '/public'));
+
 const server = express();
 
 server.get('/', (req , res) => {
-    res.sendFile(__dirname + '/EnumerationMachine_LoginPage.html');
+    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
   });
 
 server.get('/EnumerationMachine', (req , res) => {
-    res.sendFile(__dirname + '/EnumerationMachine.html');
+    res.sendFile(__dirname + '/html/EnumerationMachine.html');
 });
 
 server.get('/results', (req , res) => {
-    res.sendFile(__dirname +  '/EnumerationMachine - Host Data.html');
+    res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
 });
 
 server.get("/hostList", (req, res) => {
