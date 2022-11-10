@@ -48,4 +48,6 @@ Bryan
 - Wrote setup.md
 
 Wenxiao 
-(Weniao to update)
+- Created the initial server.js file (converted into an express app in index.js by Alex)
+- Wrote the login page into the flow chart
+- Solved the bug that images cannot be displayed correctly in the index.js file
