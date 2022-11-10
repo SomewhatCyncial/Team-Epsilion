@@ -16,6 +16,8 @@ APIs
 - server.get("/HostData/:hostname"): returns the relevent data for a specific host in the database
 - server.delete("/HostData/removeHost"): removes a specified host from the databse
 
+![Group 12](https://user-images.githubusercontent.com/112918640/200991389-1b6681e0-f35d-47ae-9435-8936118cabd0.png)
+![Group 13](https://user-images.githubusercontent.com/112918640/200991411-79cc0d03-de33-4e70-9c8e-c46316d49f69.png)
 
 Screenshots
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
