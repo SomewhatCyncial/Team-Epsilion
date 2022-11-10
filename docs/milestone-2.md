@@ -37,7 +37,10 @@ Alex
 - Posted milestone-1 github release
 
 Bryan
-(Bryan to update)
+- Created flow chart for Shodan API
+- Created mongodb database
+- Added function to EnumerationMachine.html
+- Updated EnumerationMachine.html
 
 Wenxiao 
 (Weniao to update)
