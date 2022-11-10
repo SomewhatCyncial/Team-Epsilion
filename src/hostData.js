@@ -39,7 +39,7 @@ hostList.forEach((x, index) => {
     //Not sure how to append things to dropdown yet
 });
 
-
+//Event listener for selectHost Dropdown
 document.getElementById('selectHost').addEventListener('change', () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = requestHostData(hostname);
@@ -47,6 +47,4 @@ document.getElementById('selectHost').addEventListener('change', () => {
     let vulnSeverity = document.getElementById("vulnSeverity");
 
     console.log(hostData);
-
-    vulnSeverity.innerText = JSON.parse(hostData);
 });
