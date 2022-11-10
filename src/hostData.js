@@ -40,7 +40,7 @@ hostList.forEach((x, index) => {
 });
 
 //Event listener for selectHost Dropdown
-document.getElementById('selectHost').addEventListener('change', () => {
+document.getElementById('selectHost').addEventListener("change", () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = requestHostData(hostname);
 
