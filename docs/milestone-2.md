@@ -17,11 +17,11 @@ APIs
 - server.delete("/HostData/removeHost"): removes a specified host from the databse
 
 ![Group 12](https://user-images.githubusercontent.com/112918640/200991389-1b6681e0-f35d-47ae-9435-8936118cabd0.png)
-![Group 13 (1)](https://user-images.githubusercontent.com/112918640/200991869-609cf974-4025-4734-a9e1-ee070da3a14e.png)
-
+![Group 13](https://user-images.githubusercontent.com/112918640/200991411-79cc0d03-de33-4e70-9c8e-c46316d49f69.png)
 
 Screenshots
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Our group was unable to get out CRUD functions to work properly. We implemented out index.js and tried to send and recieve data to our client.js files, but were unable to update out HTML pages using it. We will continue to try and implment functionality over the coming days. Hopefully the lectures will shed some light on what we are doing wrong. 
 
 Heroku link
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,8 @@ Alex
 - Created the right side of the application flow diagram
 - Added code to Enumeration Machnine - Host Data.html to reflect required fields for CRUD updates
 - Coded hostData.js
-- Posted milestone-1 github release
+- Wrote milestone-2.md
+- Posted milestone-2 github release
 
 Bryan
 - Created flow chart for Shodan API
