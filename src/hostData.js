@@ -21,10 +21,11 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch(url + 'HostData/:' + hostname);
+    const response = await fetch(url + 'HostData/:' + hostname)
 
     if(response.ok) {
         const hostJson = await response.json();
+        console.log(hostJson)
         return hostJson;
     } else {
         //error handling to be implemented
