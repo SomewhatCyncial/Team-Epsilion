@@ -1,3 +1,30 @@
+APIs
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+***HTML Webpage APIS
+
+server.get('/'): loads login page
+server.get('/EnumerationMachine'): loads main page (scan page)
+erver.get('/HostData'): loads Host Data page
+
+***APIs used by Enumeration Machine - Login
+
+***APIs used by Enumeration Machine
+
+***APIs used by Enumeration Machine - Host Data.js
+
+server.get("/HostData/hostList"): returns a list of all hosts currently in the database. Used to update "Select A Host" dropdown button on page load (not yet                                             implemented)
+server.get("/HostData/:hostname"): returns the relevent data for a specific host in the database
+server.delete("/HostData/removeHost"): removes a specified host from the databse
+
+
+Screenshots
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Heroku link
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://epsilon-enumeration.herokuapp.com/
+
 Division of Labor
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
