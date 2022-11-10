@@ -7,68 +7,54 @@ const { Console } = require("console");
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
 
-const uri = "mongodb+srv://TeamEpsilon:qeRbSxbrBo1icaxl@cluster0.3kmj7nn.mongodb.net/?retryWrites=true&w=majority";
+//Login Page
+server.get('/', (req , res) => {
+    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+});
 
-const client = new MongoClient(uri);
-try{
-    client.connect()
-    .then( client => {
-        console.log("Connected to Database")
-        const db = client.db('enumeration-machine')
-        const hostCollection = db.collection('hosts')
+//Home Page
+server.get('/EnumerationMachine', (req , res) => {
+    res.sendFile(__dirname + '/html/EnumerationMachine.html');
+});
 
-        //Login Page
-        server.get('/', (req , res) => {
-            res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
-        });
+//Host Data Page
+server.get('/HostData', (req , res) => {
+    res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
+});
 
-        //Home Page
-        server.get('/EnumerationMachine', (req , res) => {
-            res.sendFile(__dirname + '/html/EnumerationMachine.html');
-        });
+//Host Data Page: Returns list of hosts in db
+server.get("/HostData/hostList", (req, res) => {
+    //let data = JSON.stringify(db.collection('hosts').find().toArray());
+    data = JSON.stringify({host_1: 0, host_2: 0, host_3: 0});
+    res.send(data);
+});
 
-        //Host Data Page
-        server.get('/HostData', (req , res) => {
-            res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
-        });
+//Host Data Page: Returns data for specific host in db
+server.get("/HostData/:hostname", async (req, res) => { 
+    const hostName = req.params.hostname;
+    //let data = JSON.stringify(db.collection('hosts').find(hostname));
 
-        //Host Data Page: Returns list of hosts in db
-        server.get("/HostData/hostList", (req, res) => {
-            let data = JSON.stringify(db.collection('hosts').find().toArray());
-            res.send(data);
-        });
+    res.send("Host_1's data was successfully accessed");
+});
 
-        //Host Data Page: Returns data for specific host in db
-        server.get("/HostData/:hostname", async (req, res) => { 
-            const hostName = req.params.hostname;
-            let data = JSON.stringify(db.collection('hosts').find(hostname));
-            res.send(data);
-        });
+//Host Data Page: Removes specific host from db
+server.post("/HostData/removeHost", async (req, res) => {
 
-        //Host Data Page: Removes specific host from db
-        server.post("/HostData/removeHost", async (req, res) => {
+    //hostCollection.deleteOne(
+    //    {hostname: req.body.hostname}
+    //)
+    //.then(result => {
+    //   if (result.deletedCount === 0) {
+    //        return res.json('No host to delete');
+    //    }
+    //    res.json('Deleted Host');
+    //    })
+    //    .catch(error => console.error(error))
 
-            hostCollection.deleteOne(
-                {hostname: req.body.hostname}
-            )
-            .then(result => {
-                if (result.deletedCount === 0) {
-                  return res.json('No host to delete');
-                }
-                res.json('Deleted Host');
-              })
-              .catch(error => console.error(error))
-        });
-    })
 
-    server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
-}
-catch(err){
-    console.error(err);
-}
-finally{
-    client.close();
-}
+});
+
+server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
 
 
 
