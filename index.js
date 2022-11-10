@@ -1,8 +1,8 @@
 const fs = require("fs/promises");
 const express = require("express");
-const bodyParser= require('body-parser')
-const {MongoClient} = require('mongodb');
-const { Console } = require("console");
+
+
+const url = "https://epsilon-enumeration.herokuapp.com/";
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
@@ -56,7 +56,16 @@ server.delete("/HostData/removeHost", async (req, res) => {
 
 server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
 
+document.getElementById('selectHost').addEventListener("change", () => {
+    let hostname = document.getElementById('selectHost').value
+    const respone = fetch("/HostData/:" + hostname);
 
+    hostData = respone.json();
+
+    let vulnSeverity = document.getElementById("vulnSeverity");
+    
+    vulnSeverity.innerText = JSON.stringify(hostData);
+});
 
 
 
