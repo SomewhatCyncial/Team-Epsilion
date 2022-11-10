@@ -2,9 +2,9 @@ APIs
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ***HTML Webpage APIS
 
-server.get('/'): loads login page
-server.get('/EnumerationMachine'): loads main page (scan page)
-erver.get('/HostData'): loads Host Data page
+- server.get('/'): loads login page
+- server.get('/EnumerationMachine'): loads main page (scan page)
+- server.get('/HostData'): loads Host Data page
 
 ***APIs used by Enumeration Machine - Login
 
