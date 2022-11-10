@@ -19,14 +19,17 @@ async function removeHost()
 
 }
 
-function requestHostData(hostname)
+async function requestHostData(hostname)
 {  
-    fetch('/:' + hostname)
-    .then(response => response.json())
-    .then(json => {
-        let data = JSON.stringify(json)
-        return data;
-    });
+    const response = await fetch('/:' + hostname);
+
+    if(response.ok) {
+        const hostJson = await response.json();
+        return hostJson;
+    } else {
+        //error handling to be implemented
+        window.alert("failed to return hostData")
+    }
 }
 
 //let selectHost = document.getElementById('selectHost');
@@ -37,11 +40,11 @@ hostList.forEach((x, index) => {
 });
 
 //Event listener for selectHost Dropdown
-document.getElementById('selectHost').addEventListener("click", () => {
+document.getElementById('selectHost').addEventListener("change", () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = requestHostData(hostname);
 
-    document.getElementById("vulnSeverity").innerHTML = JSON.stringify(hostData);
+    let vulnSeverity = document.getElementById("vulnSeverity");
     
-
+    vulnSeverity.innerHTML = hostData;
 });
