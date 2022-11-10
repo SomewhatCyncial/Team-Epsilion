@@ -21,7 +21,7 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch(url + '/HostData/:' + hostname);
+    const response = await fetch(url + 'HostData/:' + hostname);
 
     if(response.ok) {
         const hostJson = await response.json();
@@ -43,6 +43,8 @@ hostList.forEach((x, index) => {
 document.getElementById('selectHost').addEventListener('change', () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = requestHostData(hostname);
+
+    console.log(hostData);
 
     let vulnSeverity = document.getElementById("vulnSeverity");
     
