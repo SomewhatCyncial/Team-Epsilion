@@ -60,6 +60,8 @@ try{
               .catch(error => console.error(error))
         });
     })
+
+    server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
 }
 catch(err){
     console.error(err);
@@ -68,7 +70,7 @@ finally{
     client.close();
 }
 
-server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+
 
 
 
