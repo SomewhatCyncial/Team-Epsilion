@@ -26,7 +26,7 @@ function requestHostData(hostname)
     .then(json => {
         let data = JSON.stringify(json)
         return data;
-    })
+    });
 }
 
 //let selectHost = document.getElementById('selectHost');
@@ -41,7 +41,7 @@ document.getElementById('selectHost').addEventListener("change", () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = requestHostData(hostname);
 
-    let vulnSeverity = document.getElementById("vulnSeverity");
+    document.getElementById("vulnSeverity").innerHTML = JSON.stringify(hostData);
     
-    vulnSeverity.innerHTML = hostData;
+
 });
