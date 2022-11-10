@@ -41,6 +41,7 @@ Bryan
 - Created mongodb database
 - Added function to EnumerationMachine.html
 - Updated EnumerationMachine.html
+- Wrote setup.md
 
 Wenxiao 
 (Weniao to update)
