@@ -19,17 +19,14 @@ async function removeHost()
 
 }
 
-async function requestHostData(hostname)
+function requestHostData(hostname)
 {  
-    const response = await fetch(url + '/:' + hostname)
-
-    if(response.ok) {
-        const hostJson = await response.json();
-        return hostJson;
-    } else {
-        //error handling to be implemented
-        window.alert("failed to return hostData")
-    }
+    fetch('/:' + hostname)
+    .then(response => response.json())
+    .then(json => {
+        let data = JSON.stringify(json)
+        return data;
+    })
 }
 
 //let selectHost = document.getElementById('selectHost');

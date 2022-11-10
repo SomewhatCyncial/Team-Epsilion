@@ -30,7 +30,7 @@ server.get("/HostData/hostList", (req, res) => {
 });
 
 //Host Data Page: Returns data for specific host in db
-server.get("/HostData/:hostname", async (req, res) => { 
+server.get("/:hostname", async (req, res) => { 
     const hostName = req.params.hostname;
     //let data = JSON.stringify(db.collection('hosts').find(hostname));
 
