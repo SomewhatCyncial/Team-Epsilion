@@ -34,11 +34,11 @@ server.get("/HostData/:hostname", async (req, res) => {
     const hostName = req.params.hostname;
     //let data = JSON.stringify(db.collection('hosts').find(hostname));
 
-    res.send("Host_1's data was successfully accessed");
+    res.json("Host_1's data was successfully accessed");
 });
 
 //Host Data Page: Removes specific host from db
-server.post("/HostData/removeHost", async (req, res) => {
+server.delete("/HostData/removeHost", async (req, res) => {
 
     //hostCollection.deleteOne(
     //    {hostname: req.body.hostname}
