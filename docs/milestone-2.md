@@ -37,8 +37,7 @@ Alex
 - Posted milestone-1 github release
 
 Bryan
-- Wrote rought draft of ideas.md
-- Created and coded EnumerationMachine.html
+(Bryan to update)
 
 Wenxiao 
-- Created and coded Enumeration Machnine_LoginPage.html
+(Weniao to update)
