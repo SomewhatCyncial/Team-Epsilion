@@ -21,7 +21,7 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch('HostData/:' + hostname)
+    const response = await fetch('/:' + hostname)
 
     if(response.ok) {
         const hostJson = await response.json();
