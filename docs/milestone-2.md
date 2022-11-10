@@ -12,9 +12,9 @@ erver.get('/HostData'): loads Host Data page
 
 ***APIs used by Enumeration Machine - Host Data.js
 
-server.get("/HostData/hostList"): returns a list of all hosts currently in the database. Used to update "Select A Host" dropdown button on page load (not yet                                             implemented)
-server.get("/HostData/:hostname"): returns the relevent data for a specific host in the database
-server.delete("/HostData/removeHost"): removes a specified host from the databse
+-server.get("/HostData/hostList"): returns a list of all hosts currently in the database. Used to update "Select A Host" dropdown button on page load (not yet                                            implemented)
+-server.get("/HostData/:hostname"): returns the relevent data for a specific host in the database
+-server.delete("/HostData/removeHost"): removes a specified host from the databse
 
 
 Screenshots
