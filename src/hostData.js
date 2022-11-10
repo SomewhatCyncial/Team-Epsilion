@@ -46,5 +46,7 @@ document.getElementById('selectHost').addEventListener("change", () => {
 
     let vulnSeverity = document.getElementById("vulnSeverity");
     
-    vulnSeverity.innerText = hostData;
+    vulnSeverity.innerHTML = hostData;
+
+
 });
