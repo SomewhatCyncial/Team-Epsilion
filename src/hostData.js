@@ -1,4 +1,4 @@
-const url = "https://epsilon-enumeration.herokuapp.com/";
+const url = "https://epsilon-enumeration.herokuapp.com/HostData";
 
 async function requestHostList()
 {  
@@ -25,7 +25,6 @@ async function requestHostData(hostname)
 
     if(response.ok) {
         const hostJson = await response.json();
-        console.log(hostJson)
         return hostJson;
     } else {
         //error handling to be implemented
@@ -47,5 +46,5 @@ document.getElementById('selectHost').addEventListener("change", () => {
 
     let vulnSeverity = document.getElementById("vulnSeverity");
     
-    vulnSeverity.innerText = JSON.stringify(hostData);
+    vulnSeverity.innerText = hostData;
 });
