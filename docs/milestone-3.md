@@ -1,6 +1,5 @@
-This is for Host Collection
 
-Data Format:
+Host Collection Data Format:
 {
 Host: "name", 
 IP: 0.0.0.0,
@@ -9,13 +8,16 @@ scans: [],
 user: "",
 }
 
+secrets.json Data Format
 Username/password data:
+
 {
 username: "",
 password: ""
 }
 
-vulnerabilities:
+Vulnerability collection Data Format:
+
 {
 Vulnerability: "",
 ports: []
