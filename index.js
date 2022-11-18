@@ -35,7 +35,7 @@ server.post("/HostData/hostList/new", async (req, res) => {
     let response = await db.collection("hosts").insertOne(newHost)
     res.json(response);
 });
-// update a host in hostList
+// update a host in hostList Bryan
 server.put("/HostData/:_id", async (req, res) => {
     const newHost = req.body
     const _id = req.params._id
@@ -43,7 +43,7 @@ server.put("/HostData/:_id", async (req, res) => {
     let response = await db.collection("hosts").updateOne({_id},{$set: newHost})
     res.json(response);
 });
-//delete a host in hostList
+//delete a host in hostList Bryan
 server.delete("/HostData/:_id", async (req, res) => {
     const _id = req.params._id
     let response = await db.collection("hosts").deleteOne({_id})
