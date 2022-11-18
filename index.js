@@ -1,11 +1,13 @@
 const fs = require("fs/promises");
 const express = require("express");
-
-
+require("dotenv").config()
+const {MongoClient} = require('mongodb');
+let db = null;
 const url = "https://epsilon-enumeration.herokuapp.com/";
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
+server.use(express.json());
 
 //Login Page
 server.get('/', (req , res) => {
@@ -23,10 +25,29 @@ server.get('/HostData', (req , res) => {
 });
 
 //Host Data Page: Returns list of hosts in db
-server.get("/HostData/hostList", (req, res) => {
-    //let data = JSON.stringify(db.collection('hosts').find().toArray());
-    data = JSON.stringify({host_1: 0, host_2: 0, host_3: 0});
-    res.send(data);
+server.get("/HostData/hostList", async (req, res) => {
+    let hostList = await db.collection('hosts').find().toArray();
+    res.json(hostList);
+});
+
+server.post("/HostData/hostList/new", async (req, res) => {
+    let newHost = req.body
+    let response = await db.collection("hosts").insertOne(newHost)
+    res.json(response);
+});
+
+server.put("/HostData/:_id", async (req, res) => {
+    const newHost = req.body
+    const _id = req.params._id
+    console.log(_id);
+    let response = await db.collection("hosts").updateOne({_id})
+    res.json(response);
+});
+
+server.delete("/HostData/:_id", async (req, res) => {
+    const _id = req.params._id
+    let response = await db.collection("hosts").deleteOne({_id})
+    res.json(response);
 });
 
 //Host Data Page: Returns data for specific host in db
@@ -54,9 +75,24 @@ server.delete("/HostData/removeHost", async (req, res) => {
 
 });
 
-server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
 
 
+async function main() {
+
+    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    const client = new MongoClient(uri);
+    try{
+        await client.connect()
+        db = client.db('enumeration-machine');
+        let hostList = await db.collection('hosts').find().toArray();
+        server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+main();
 
 
 

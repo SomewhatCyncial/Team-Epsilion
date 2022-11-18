@@ -1,17 +1,19 @@
 //javascript file for database functions
+require("dotenv").config()
 const {MongoClient} = require('mongodb');
 
 
 
 async function main() {
 
-    const uri = "mongodb+srv://TeamEpsilon:qeRbSxbrBo1icaxl@cluster0.3kmj7nn.mongodb.net/?retryWrites=true&w=majority";
-
+    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    console.log(uri);
     const client = new MongoClient(uri);
     try{
         await client.connect()
         .then( client => {
-            const db = client.db('enumeration-machine')
+            const db = client.db('enumeration-machine');
+            console.log("connected to MongoDB");
         })
     }
     catch(err){
