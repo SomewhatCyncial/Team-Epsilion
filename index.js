@@ -40,7 +40,7 @@ server.put("/HostData/:_id", async (req, res) => {
     const newHost = req.body
     const _id = req.params._id
     console.log(_id);
-    let response = await db.collection("hosts").updateOne({_id})
+    let response = await db.collection("hosts").updateOne({_id},{$set: newHost})
     res.json(response);
 });
 
