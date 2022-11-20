@@ -67,10 +67,8 @@ server.post("/login/signup", async (req,res) =>{
 
 // Update a client's login data - Wenxiao
 server.put("/login/update", async (req, res) => {
-    const newHost = req.body;
-    const _id = req.params._id;
-    console.log(_id);
-    let response = await db.collection("login").updateOne({_id},{$set: newHost});
+    const newClient = req.body;
+    let response = await db.collection("login").update({username: newClient[username]}, {$set: newClient});
     res.json(response);
 });
 
