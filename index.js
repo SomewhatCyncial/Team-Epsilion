@@ -9,7 +9,7 @@ server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
 
 //Login Page
-server.get('/', (req , res) => {
+server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
 });
 
@@ -34,10 +34,57 @@ server.get("/HostData/hostList", async (req, res) => {
 
     res.json(response);
 });
+
+// Read and check in the Login Page - Wenxiao
+server.post("/login/check", async (req,res) => {
+    let client = req.body;
+    const user = client[username];
+    const pass = client[password];
+    let response = await db.collection("login").find({username : user, password : pass});
+    if (response.length === 1){
+        console.log("Login Success");
+        res.redirect('/EnumerationMachine');
+    }
+    else{
+        console.log("Login Failure");
+        res.redirect('/login');
+    }
+});
+
+// Sign up - Wenxiao (Adding new client to the login data)
+server.post("/login/signup", async (req,res) =>{
+    let newClient = req.body;
+    let response = await db.collection("login").find({username : newClient[username]});
+    if (response.length === 0){
+        let response2 = await db.collection("login").insertOne(newClient);
+        console.log('Sign up Success');
+    }
+    else{
+        console.log('Sign up Failure: Username Already Exists');
+    }
+    res.redirect("/login");
+});
+
+// Update a client's login data
+server.put("/login/update", async (req, res) => {
+    const newHost = req.body;
+    const _id = req.params._id;
+    console.log(_id);
+    let response = await db.collection("login").updateOne({_id},{$set: newHost});
+    res.json(response);
+});
+
+// Delete a client's login data
+server.delete("/client/delete", async (req, res) => {
+    const _id = req.params._id;
+    let response = await db.collection("login").deleteOne({_id});
+    res.json(response);
+});
+
 // add new Host to hostList - Bryan
 server.post("/HostData/hostList/new", async (req, res) => {
-    let newHost = req.body
-    let response = await db.collection("hosts").insertOne(newHost)
+    let newHost = req.body;
+    let response = await db.collection("hosts").insertOne(newHost);
     res.json(response);
 });
 // update a host in hostList - Bryan
