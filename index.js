@@ -2,23 +2,7 @@ const fs = require("fs/promises");
 const express = require("express");
 require("dotenv").config()
 const {MongoClient} = require('mongodb');
-
-const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
-console.log(uri);
-const client = new MongoClient(uri);
-try{
-    await client.connect()
-    .then( client => {
-        const db = client.db('enumeration-machine');
-        console.log("connected to MongoDB");
-    })
-}
-catch(err){
-    console.error(err);
-}
-finally{
-    await client.close();
-}
+let db = null;
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
@@ -66,31 +50,11 @@ server.delete("/HostData/:_id", async (req, res) => {
 });
 
 //Host Data Page: Returns data for specific host in db
-server.get("/:hostname", async (req, res) => { 
-    const hostName = req.params.hostname;
-    //let data = JSON.stringify(db.collection('hosts').find(hostname));
-
-    res.send(JSON.stringify({hostname: "host_1", Ports: "1,2,3,4,5", IP: "127.0.0.1"}));
+server.get("/HostData/:hostname", async (req, res) => { 
+    const hostname = req.params.hostname;
+    let response = await (db.collection('hosts').find(hostname));
+    res.json(response);
 });
-
-//Host Data Page: Removes specific host from db
-server.delete("/HostData/removeHost", async (req, res) => {
-
-    //hostCollection.deleteOne(
-    //    {hostname: req.body.hostname}
-    //)
-    //.then(result => {
-    //   if (result.deletedCount === 0) {
-    //        return res.json('No host to delete');
-    //    }
-    //    res.json('Deleted Host');
-    //    })
-    //    .catch(error => console.error(error))
-
-
-});
-
-
 
 async function main() {
 

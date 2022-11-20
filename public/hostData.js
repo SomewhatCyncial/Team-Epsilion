@@ -23,7 +23,7 @@ async function removeHost()
 
 async function requestHostData(hostname)
 {  
-    const response = await fetch('/:' + hostname);
+    const response = await fetch('/HostData/:' + hostname);
 
     if(response.ok) {
         const hostJson = await response.json();
@@ -31,7 +31,6 @@ async function requestHostData(hostname)
         return hostJson;
     } else {
         //error handling to be implemented
-        window.alert("failed to return hostData")
     }
 }
 
