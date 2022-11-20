@@ -69,7 +69,6 @@ async function main() {
     try{
         await client.connect()
         db = client.db('enumeration-machine');
-        let hostList = await db.collection('hosts').find().toArray();
         server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
     }
     catch(err){
