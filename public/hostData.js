@@ -7,11 +7,9 @@ async function requestHostList()
     if(response.ok) {
         const hostJson = await response.json(); //returns JSON object list of hostnames (i.e. {Workstation_1: 0, Workstation_2: 0, ....}) Number values are arbitary
         let hostList = Object.keys(hostJson);
-        console.log(hostList);
         return hostList;
     } else {
         //error handling to be implemented
-        window.alert("failed to return hostList");
         return [];
     }
 }

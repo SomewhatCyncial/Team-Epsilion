@@ -25,16 +25,22 @@ server.get('/HostData', (req , res) => {
 
 //Host Data Page: Returns list of hosts in db
 server.get("/HostData/hostList", async (req, res) => {
-    let hostList = await db.collection('hosts').find().toArray();
-    res.json(hostList);
+    let response = [];
+    //let user = req.body;
+    let user = 'admin'; //static entry until usernames implemented
+    db.collection('hosts').find({user: { $elemMatch: user}}).forEach((x) => {
+        response.push(x['host']);
+    }); // get all hosts created by current user then add their hostname to the response
+
+    res.json(response);
 });
-// add new Host to hostList Bryan
+// add new Host to hostList - Bryan
 server.post("/HostData/hostList/new", async (req, res) => {
     let newHost = req.body
     let response = await db.collection("hosts").insertOne(newHost)
     res.json(response);
 });
-// update a host in hostList Bryan
+// update a host in hostList - Bryan
 server.put("/HostData/:_id", async (req, res) => {
     const newHost = req.body
     const _id = req.params._id
@@ -42,7 +48,7 @@ server.put("/HostData/:_id", async (req, res) => {
     let response = await db.collection("hosts").updateOne({_id},{$set: newHost})
     res.json(response);
 });
-//delete a host in hostList Bryan
+//delete a host in hostList - Bryan
 server.delete("/HostData/:_id", async (req, res) => {
     const _id = req.params._id
     let response = await db.collection("hosts").deleteOne({_id})
