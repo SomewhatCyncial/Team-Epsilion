@@ -51,7 +51,7 @@ server.post("/login/check", async (req,res) => {
     }
 });
 
-// Sign up - Wenxiao (Adding new client to the login data)
+// Sign up - Wenxiao (Adding new client to the login data) 
 server.post("/login/signup", async (req,res) =>{
     let newClient = req.body;
     let response = await db.collection("login").find({username : newClient[username]});
@@ -65,7 +65,7 @@ server.post("/login/signup", async (req,res) =>{
     res.redirect("/login");
 });
 
-// Update a client's login data
+// Update a client's login data - Wenxiao
 server.put("/login/update", async (req, res) => {
     const newHost = req.body;
     const _id = req.params._id;
@@ -74,7 +74,7 @@ server.put("/login/update", async (req, res) => {
     res.json(response);
 });
 
-// Delete a client's login data
+// Delete a client's login data - Wenxiao
 server.delete("/client/delete", async (req, res) => {
     const _id = req.params._id;
     let response = await db.collection("login").deleteOne({_id});
