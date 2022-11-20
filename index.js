@@ -58,7 +58,7 @@ server.delete("/HostData/:_id", async (req, res) => {
 //Host Data Page: Returns data for specific host in db
 server.get("/HostData/:hostname", async (req, res) => { 
     const hostname = req.params.hostname;
-    let response = await (db.collection('hosts').find(hostname));
+    let response = await (db.collection('hosts').find({host: { $elemMatch: hostname}}));
     res.json(response);
 });
 
