@@ -2,8 +2,23 @@ const fs = require("fs/promises");
 const express = require("express");
 require("dotenv").config()
 const {MongoClient} = require('mongodb');
-let db = null;
-const url = "https://epsilon-enumeration.herokuapp.com/";
+
+const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+console.log(uri);
+const client = new MongoClient(uri);
+try{
+    await client.connect()
+    .then( client => {
+        const db = client.db('enumeration-machine');
+        console.log("connected to MongoDB");
+    })
+}
+catch(err){
+    console.error(err);
+}
+finally{
+    await client.close();
+}
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
