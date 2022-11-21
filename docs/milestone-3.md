@@ -1,26 +1,32 @@
+Database Documentation
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Host Collection Data Format:
-{
-Host: "name", 
-IP: 0.0.0.0,
-ports: [],
-scans: [],
-user: "",
-}
+Our project is using a MongoDB database hosted by MongoDB Atlas. It currently has three collections being used to store information (may more be added if required and the timeline permits. They're fomratting and purpose are as follows:
 
-secrets.json Data Format
-Username/password data:
+Hosts: This will hold all relevent data pertaining to a host that has been scanned. These inclued the identifier (hostname), the ip address, any open ports, and scan_ids its assocaited wiht (provided by SHODAN), and the user that initiated the scan (this will be used to determine what host information a user has access to).
 
-{
-username: "",
-password: ""
-}
+  { Host: "name", IP: "0.0.0.0", ports: [], scans: [], user: "", }
 
-Vulnerability collection Data Format:
+Vulns: This will be a collection of know vulnerabilites and their associated ports. For example, RDP uses port 3389. If this port is found open to the internet, it could be exploloited for an RDP connection. Any scans that assoicate this port with a host can query this collection for relevent vulnerabilites.
 
-{
-Vulnerability: "",
-ports: []
-}
+  { Vuln: "Example", ports: [1,2,3,4] }
 
+Credentials: This will hold the crednetials of registered users
 
+  { username: "testUser", password: test } <- these values will be hashes
+
+Division of Labor
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Alex
+
+- Wrote milestone3.md
+- Create MongoDB database and attached it to Heroku and Github
+- Assisted in creation of data formats and created relevent collections in MongoDB
+- Assisted in database coding for APIs used by Host Data webpage
+- Standardized prexisting code to match format implemented by Bryan
+- Minor formatting change ins hostData.html
+
+Bryan
+
+Wenxiao 
