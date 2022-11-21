@@ -35,3 +35,6 @@ Bryan
 - Assisted in database coding for APIs used by Host Data webpage
 
 Wenxiao 
+- Made CRUD operations for the login page in server
+- Create the release
+- Assisted in database coding for APIs used by Login webpage 
