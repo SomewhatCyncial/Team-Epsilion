@@ -29,8 +29,8 @@ Alex
 
 Bryan
 
-- Made CRUD for host data in server
-- connected server to mongo database
+- Made CRUD operations for host data in server
+- wrote code that connected server to mongo database
 - Assisted in creation of data formats and created relevent collections in MongoDB
 - Assisted in database coding for APIs used by Host Data webpage
 
