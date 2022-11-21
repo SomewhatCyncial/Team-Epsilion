@@ -54,9 +54,9 @@ server.post("/login/check", async (req,res) => {
 // Sign up - Wenxiao (Adding new client to the login data) 
 server.post("/login/signup", async (req,res) =>{
     let newClient = req.body;
-    let response = await db.collection("login").find({username : newClient[username]});
+    let response = await db.collection("credentials").find({username : newClient[username]});
     if (response.length === 0){
-        let response2 = await db.collection("login").insertOne(newClient);
+        let response2 = await db.collection("credentials").insertOne(newClient);
         console.log('Sign up Success');
     }
     else{
@@ -68,14 +68,14 @@ server.post("/login/signup", async (req,res) =>{
 // Update a client's login data - Wenxiao
 server.put("/login/update", async (req, res) => {
     const newClient = req.body;
-    let response = await db.collection("login").update({username: newClient[username]}, {$set: newClient});
+    let response = await db.collection("credentials").update({username: newClient[username]}, {$set: newClient});
     res.json(response);
 });
 
 // Delete a client's login data - Wenxiao
-server.delete("/client/delete", async (req, res) => {
+server.delete("/login/delete", async (req, res) => {
     const _id = req.params._id;
-    let response = await db.collection("login").deleteOne({_id});
+    let response = await db.collection("credentials").deleteOne({_id});
     res.json(response);
 });
 
