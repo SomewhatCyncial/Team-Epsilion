@@ -1,17 +1,17 @@
 Database Documentation
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Our project is using a MongoDB database hosted by MongoDB Atlas. It currently has three collections being used to store information (may more be added if required and the timeline permits. They're fomratting and purpose are as follows:
+Our project is using a MongoDB database hosted by MongoDB Atlas. It currently has three collections being used to store information (more may be added if required and the timeline permits. They're formatting and purpose are as follows:
 
-Hosts: This will hold all relevent data pertaining to a host that has been scanned. These inclued the identifier (hostname), the ip address, any open ports, and scan_ids its assocaited wiht (provided by SHODAN), and the user that initiated the scan (this will be used to determine what host information a user has access to).
+Hosts: This will hold all relevent data pertaining to a host that has been scanned. These inclued the identifier (hostname), the ip address, any open ports, scan_ids (provided by SHODAN), and the user that initiated the scan (this will be used to determine what host information a user has access to).
 
-  { Host: "name", IP: "0.0.0.0", ports: [], scans: [], user: "", }
+  { host: "name", ip: "0.0.0.0", ports: [], scans: [], user: "", }
 
 Vulns: This will be a collection of know vulnerabilites and their associated ports. For example, RDP uses port 3389. If this port is found open to the internet, it could be exploloited for an RDP connection. Any scans that assoicate this port with a host can query this collection for relevent vulnerabilites.
 
-  { Vuln: "Example", ports: [1,2,3,4] }
+  { vuln: "Example", ports: [1,2,3,4] }
 
-Credentials: This will hold the crednetials of registered users
+Credentials: This will hold the credrentials of registered users
 
   { username: "testUser", password: test } <- these values will be hashes
 
