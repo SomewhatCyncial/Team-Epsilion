@@ -37,6 +37,10 @@ async function requestHostData(hostname)
 let hostList = await requestHostList();
 hostList.forEach((x, index) => {
     //Not sure how to append things to dropdown yet
+    let newOption = new Option(x, undefined);
+
+    const select = document.querySelector('selectHost');
+    select.add(newOption, undefined);
 });
 
 //Event listener for selectHost Dropdown
@@ -44,11 +48,18 @@ document.getElementById('selectHost').addEventListener("change",async () => {
     let hostname = document.getElementById('selectHost').value
     const hostData = await requestHostData(hostname);
 
-    let vulnSeverity = document.getElementById("vulnSeverity");
+    let hostSummary = document.getElementById("hostSummary");
     
-    vulnSeverity.innerHTML = `
+    hostSummary.innerHTML = `
     <div>
-    <p>${hostData.hostname}</p>
+        <p>
+            <br>Host: ${hostData.host}</br> 
+            <br></br>
+            <br>IP: ${hostData.ip}</br> 
+            <br></br>
+            <br>Ports: ${hostData.ports}</br> 
+            <br></br>
+        </p>
     </div>
     `;
 });

@@ -2,11 +2,17 @@ const fs = require("fs/promises");
 const express = require("express");
 require("dotenv").config()
 const {MongoClient} = require('mongodb');
+const shodan = "https://api.shodan.io/shodan";
+const apiKey = "";
 let db = null;
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Webpage Getters - Used to display specific pages
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 //Login Page
 server.get('/login', (req , res) => {
@@ -23,17 +29,9 @@ server.get('/HostData', (req , res) => {
     res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
 });
 
-//Host Data Page: Returns list of hosts in db
-server.get("/HostData/hostList", async (req, res) => {
-    let response = [];
-    //let user = req.body;
-    let user = 'admin'; //static entry until usernames implemented
-    db.collection('hosts').find({user: { $elemMatch: user}}).forEach((x) => {
-        response.push(x['host']);
-    }); // get all hosts created by current user then add their hostname to the response
-
-    res.json(response);
-});
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Login Page APIs
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 // Read and check in the Login Page - Wenxiao
 server.post("/login/check", async (req,res) => {
@@ -79,6 +77,10 @@ server.delete("/login/delete", async (req, res) => {
     res.json(response);
 });
 
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Host Data APIs
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 // add new Host to hostList - Bryan
 server.post("/HostData/hostList/new", async (req, res) => {
     let newHost = req.body;
@@ -100,12 +102,85 @@ server.delete("/HostData/:_id", async (req, res) => {
     res.json(response);
 });
 
+//Host Data Page: Returns list of hosts in db
+server.get("/HostData/hostList", async (req, res) => {
+    let response = [];
+    //let user = req.body;
+    let user = 'testUser'; //static entry until usernames implemented
+    db.collection('hosts').find({user: { $elemMatch: user}}).forEach((x) => {
+        response.push(x['host']);
+    }); // get all hosts created by current user then add their hostname to the response
+
+    res.json(response);
+});
+
 //Host Data Page: Returns data for specific host in db
 server.get("/HostData/:hostname", async (req, res) => { 
     const hostname = req.params.hostname;
     let response = await (db.collection('hosts').find({host: { $elemMatch: hostname}}));
     res.json(response);
 });
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Shodan Code - Working
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+//This function starts a scan of an ip(s) and returns the scan id. - Alex 
+//ips is an array of ip values
+async function startShodanScan(ips)
+{
+    ips.toString();
+    const response = await fetch(shodan + '/scan?key=' + apiKey, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'ips= ' + ips
+    });
+
+    if(response.ok) {
+        const scanData = await response.json(); //JSON object with scan id and number of ips scanned
+        let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
+        db.collection("scans").insertOne(newScan); //add object to mongo
+        return scanData.id; //return id on started scan
+    } else {
+        //error handling to be implemented
+        return null;
+    }
+}
+
+//This function gets the status of a current Shodan scan using its id. A completed scan will be makred as "DONE" - Alex
+async function scanStatus(id)
+{
+    const response = await fetch(shodan + '/scan/' + id + '?key=' + apiKey)
+
+    if(response.ok) {
+        const scanData = await response.json()
+        return scanData.status;
+    } else {
+        //error handling to be implemented
+        return null;
+    }
+}
+
+//After a scan is complete, you can query any relvenet data from Shodan using the ip of the scanned host. This function will return that data. - Alex
+//Respones format found on https://developer.shodan.io/api
+async function getShodanData(ip)
+{
+    const response = await fetch(shodan + '/host/' + ip + '?key=' + apiKey);
+
+    if(response.ok) {
+        const hostData = await response.json(); //JSON object of host data
+        return hostData;
+    } else {
+        //error handling to be implemented
+        return null;
+    }
+}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Main
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 async function main() {
 
