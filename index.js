@@ -106,8 +106,8 @@ server.delete("/HostData/:_id", async (req, res) => {
 server.get("/HostData/hostList", async (req, res) => {
     let response = [];
     //let user = req.body;
-    let user = 'testUser'; //static entry until usernames implemented
-    db.collection('hosts').find({user: { $elemMatch: user}}).forEach((x) => {
+    let currentUser = 'testUser'; //static entry until usernames implemented
+    db.collection('hosts').find({user: currentUser}).forEach((x) => {
         response.push(x['host']);
     }); // get all hosts created by current user then add their hostname to the response
 
