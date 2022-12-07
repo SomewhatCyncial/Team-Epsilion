@@ -8,7 +8,6 @@ async function requestHostList()
 
     if(response.ok) {
         const hostList= await response.json();
-        console.log(hostList); //returns JSON object list of hostnames (i.e. {Workstation_1: 0, Workstation_2: 0, ....}) Number values are arbitary
         return hostList;
     } else {
         //error handling to be implemented
@@ -21,13 +20,13 @@ async function removeHost()
 
 }
 
-async function requestHostData(hostname)
+async function requestHostData(ip)
 {  
-    const response = await fetch('/HostData/:' + hostname);
+    console.log(ip);
+    const response = await fetch('/HostData/' + ip);
 
     if(response.ok) {
         const hostJson = await response.json();
-        console.log(hostJson);
         return hostJson;
     } else {
         //error handling to be implemented
@@ -40,20 +39,22 @@ Event Listeners
 
 //Event listener for selectHost Dropdown
 document.getElementById('selectHost').addEventListener("change",async () => {
-    let hostname = document.getElementById('selectHost').value
-    const hostData = await requestHostData(hostname);
+    let ip = document.getElementById('selectHost').value
+    const hostData = await requestHostData(ip);
 
     let hostSummary = document.getElementById("hostSummary");
     
     hostSummary.innerHTML = `
     <div>
-        <p>
-            <br>Host: ${hostData.host}</br> 
-            <br></br>
-            <br>IP: ${hostData.ip}</br> 
-            <br></br>
-            <br>Ports: ${hostData.ports}</br> 
-            <br></br>
+        <p class = "text-left">
+            <br>IP: ${hostData['ip']}</br> 
+            <br>City: ${hostData['city']}</br> 
+            <br>Country: ${hostData['country_name']}</br>
+            <br>Lat / Long: ${hostData['latitude']}, ${hostData['longitude']} </br>
+            <br>Host: ${hostData['hostnames']}</br>
+            <br>OS: ${hostData['os']}</br>  
+            <br>Org: ${hostData['org']}</br> 
+            <br>ISP: ${hostData['isp']}</br> 
         </p>
     </div>
     `;

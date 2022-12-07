@@ -115,9 +115,24 @@ server.get("/HostData/hostList", async (req, res) => {
 });
 
 //Host Data Page: Returns data for specific host in db
-server.get("/HostData/:hostname", async (req, res) => { 
-    const hostname = req.params.hostname;
-    let response = await (db.collection('hosts').find({host: { $elemMatch: hostname}}));
+server.get("/HostData/:ip", async (req, res) => { 
+    const ip = req.params.ip;
+    let response = {}
+    console.log(ip);
+    await (db.collection('hosts').find({ip: ip})).forEach((x) => {
+        response['ip'] = x['ip'];
+        response['city'] = x['city'];
+        response['country'] = x['country'];
+        response['latitude'] = x['latitude'];
+        response['longitude'] = x['longitude'];
+        response['hostnames'] = x['hostnames'];
+        response['os'] = x['os'];
+        response['org'] = x['org'];
+        response['ISP'] = x['ISP'];
+        response['ports'] = x['ports'];
+    });
+
+    console.log(response);
     res.json(response);
 });
 
