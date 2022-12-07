@@ -35,7 +35,8 @@ async function requestHostData(hostname)
 //let selectHost = document.getElementById('selectHost');
 //selectHost.selectedIndex = 0; //default starting value is "(Select a Host)"
 let hostList = await requestHostList();
-hostList.forEach((x, index) => {
+console.log(hostList);
+hostList.forEach((x) => {
     //Not sure how to append things to dropdown yet
     let newOption = new Option(x, undefined);
 
