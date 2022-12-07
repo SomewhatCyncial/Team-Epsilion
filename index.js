@@ -107,11 +107,11 @@ server.get("/HostData/hostList", async (req, res) => {
     let response = [];
     //let user = req.body;
     let currentUser = 'testUser'; //static entry until usernames implemented
-    db.collection('hosts').find({user: currentUser}).forEach((x) => {
-        response.push(x['host']);
+    await db.collection('hosts').find({user: currentUser}).forEach((x) => {
+        response.push(x['ip']);
     }); // get all hosts created by current user then add their hostname to the response
 
-    res.json(response);
+    res.send(response);
 });
 
 //Host Data Page: Returns data for specific host in db
