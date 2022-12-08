@@ -33,7 +33,7 @@ async function ipChecker(){
         // ipArray.append(startIP)
         // let IPS = {ips: ipArray};
         let API_KEY = "ch4OqIt7AqwXvkB4uxvyL3x0HujgUJxY"
-        const IPS = ["192.168.100.101"];
+        const IPS = ["8.8.8.8"];
         const response = await fetch(`https://api.shodan.io/shodan/scan?key=${API_KEY}`,{
             method: 'POST',
             body: JSON.stringify(IPS)
