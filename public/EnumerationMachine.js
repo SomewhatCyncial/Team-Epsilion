@@ -14,11 +14,39 @@ async function startShodanScan(ips)
         body: 'ips= ' + ips
     });
 
-    if(response.ok) {
+    if(response.id) {
         const scanData = await response.json(); //JSON object with scan id and number of ips scanned
         let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
         db.collection("scans").insertOne(newScan); //add object to mongo
         return scanData.id; //return id on started scan
+    } else {
+        //error handling to be implemented
+        return null;
+    }
+}
+
+async function scanStatus(id)
+{
+    const response = await fetch(shodan + '/scan/' + id + '?key=' + apiKey)
+
+    if(response.ok) {
+        const scanData = await response.json()
+        return scanData.status;
+    } else {
+        //error handling to be implemented
+        return null;
+    }
+}
+
+//After a scan is complete, you can query any relvenet data from Shodan using the ip of the scanned host. This function will return that data. - Alex
+//Respones format found on https://developer.shodan.io/api
+async function getShodanData(ip)
+{
+    const response = await fetch(shodan + '/host/' + ip + '?key=' + apiKey);
+
+    if(response.ok) {
+        const hostData = await response.json(); //JSON object of host data
+        return hostData;
     } else {
         //error handling to be implemented
         return null;
@@ -40,7 +68,7 @@ async function ipChecker(){
         }).then((res) => res.json());
         // console.log(response);
         // return response;
-        if (response.ok){
+        if (response.id){
             console.log("Scan Successful");
         }
         else{
