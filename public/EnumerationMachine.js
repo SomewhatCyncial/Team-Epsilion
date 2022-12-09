@@ -96,7 +96,7 @@ async function ipChecker(){
 
 
 async function main() {
-    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    const uri = "mongodb+srv://admin:3fKGsY%25*6WrRB6IF@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority";//process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
     const client = new MongoClient(uri);
     try{
         await client.connect()
