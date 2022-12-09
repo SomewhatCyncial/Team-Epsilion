@@ -1,13 +1,19 @@
 //vulnerability check button (implemented By Bryan) I'm not checking to see of any input is correct or anything yet
 //possible IP addresses
 let API_KEY = process.env.API_KEY;
+const shodan = "https://api.shodan.io/shodan";
 // Class A: 10.0.0.0 — 10.255.255.255
 // Class B: 172.16.0.0 — 172.31.255.255
 // Class C: 192.168.0.0 — 192.168.255.255
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
 async function startShodanScan(ips)
 {
     ips.toString();
-    const response = await fetch(shodan + '/scan?key=' + apiKey, {
+    const response = await fetch(shodan + '/scan?key=' + API_KEY, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -30,7 +36,7 @@ async function scanStatus(id)
 {
     const response = await fetch(shodan + '/scan/' + id + '?key=' + apiKey)
 
-    if(response.ok) {
+    if(response.status) {
         const scanData = await response.json()
         return scanData.status;
     } else {
@@ -45,7 +51,7 @@ async function getShodanData(ip)
 {
     const response = await fetch(shodan + '/host/' + ip + '?key=' + apiKey);
 
-    if(response.ok) {
+    if(response.ip) {
         const hostData = await response.json(); //JSON object of host data
         return hostData;
     } else {
@@ -62,18 +68,26 @@ async function ipChecker(){
         // ipArray.append(startIP)
         // let IPS = {ips: ipArray};
         const IPS = ["8.8.8.8"];
-        const response = await fetch(`https://api.shodan.io/shodan/scan?key=${API_KEY}`,{
-            method: 'POST',
-            body: JSON.stringify(IPS)
-        }).then((res) => res.json());
-        // console.log(response);
-        // return response;
-        if (response.id){
-            console.log("Scan Successful");
+        let scanID = startShodanScan(IPS);
+        let scanStatus = scanStatus(scanID);
+        while(scanStatus !== "DONE"){
+            await sleep(5000);
+            scanStatus = scanStatus(scanID);
         }
-        else{
-            console.log("Scan Failure");
-        }
+        hostData = getShodanData(IPS);
+        db.collection("hosts").insertOne(hostData);
+        // const response = await fetch(`https://api.shodan.io/shodan/scan?key=${API_KEY}`,{
+        //     method: 'POST',
+        //     body: 'ips= ' + IPS
+        // }).then((res) => res.json());
+        // // console.log(response);
+        // // return response;
+        // if (response.id){
+        //     console.log("Scan Successful");
+        // }
+        // else{
+        //     console.log("Scan Failure");
+        // }
 
     });
 }
@@ -81,6 +95,16 @@ async function ipChecker(){
 
 
 async function main() {
+    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    const client = new MongoClient(uri);
+    try{
+        await client.connect()
+        db = client.db('enumeration-machine');
+    }
+    catch(err){
+        console.error(err);
+    }
+
     let currentScan = await ipChecker();
    
 }
