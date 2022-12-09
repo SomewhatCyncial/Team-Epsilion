@@ -25,9 +25,15 @@ server.get('/EnumerationMachine', (req , res) => {
 });
 
 //Host Data Page
-server.get('/HostData', (req , res) => {
+server.get('/hostData', (req , res) => {
     res.sendFile(__dirname +  '/html/hostData.html');
 });
+
+//Vuln Library Page
+server.get('/vulns', (req , res) => {
+    res.sendFile(__dirname +  '/html/hostData.html');
+});
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Login Page APIs
@@ -82,13 +88,13 @@ Host Data APIs
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 // add new Host to hostList - Bryan
-server.post("/HostData/hostList/new", async (req, res) => {
+server.post("/hostData/hostList/new", async (req, res) => {
     let newHost = req.body;
     let response = await db.collection("hosts").insertOne(newHost);
     res.json(response);
 });
 // update a host in hostList - Bryan
-server.put("/HostData/:_id", async (req, res) => {
+server.put("/hostData/:_id", async (req, res) => {
     const newHost = req.body
     const _id = req.params._id
     console.log(_id);
@@ -96,30 +102,28 @@ server.put("/HostData/:_id", async (req, res) => {
     res.json(response);
 });
 //delete a host in hostList - Bryan
-server.delete("/HostData/:_id", async (req, res) => {
+server.delete("/hostData/:_id", async (req, res) => {
     const _id = req.params._id
     let response = await db.collection("hosts").deleteOne({_id})
     res.json(response);
 });
 
 //Host Data Page: Returns list of hosts in db
-server.get("/HostData/hostList", async (req, res) => {
+server.get("/hostData/hostList", async (req, res) => {
     let response = [];
-    //let user = req.body;
     let currentUser = 'testUser'; //static entry until usernames implemented
     await db.collection('hosts').find({user: currentUser}).forEach((x) => {
         response.push(x['ip']);
     }); // get all hosts created by current user then add their hostname to the response
-
     res.send(response);
 });
 
 //Host Data Page: Returns data for specific host in db
-server.get("/HostData/:ip", async (req, res) => { 
+server.get("/hostData/:ip", async (req, res) => { 
     const ip = req.params.ip;
     let response = {}
     console.log(ip);
-    await (db.collection('hosts').find({ip: ip})).forEach((x) => {
+    await (db.collection('hosts').find({ip: ip})).forEach((x) => { //gets data from mongoDB and saves relevent fields in response
         response['ip'] = x['ip'];
         response['city'] = x['city'];
         response['country'] = x['country'];
@@ -131,10 +135,21 @@ server.get("/HostData/:ip", async (req, res) => {
         response['ISP'] = x['ISP'];
         response['ports'] = x['ports'];
     });
-
-    console.log(response);
     res.json(response);
 });
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Vulnerability Data APIs
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+server.get("/vulns/library", async (req, res) => {
+    let response= [];
+    await db.collection('vulns').find().forEach((x) => {
+        response.push(x);
+    });
+    res.send(response);
+});
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Shodan Code - Working
