@@ -62,7 +62,7 @@ async function getShodanData(ip)
 
 async function ipChecker(){
     document.getElementById("ipCheck").addEventListener('click', async () => {
-        // let startIP = document.getElementById("startIP").value()
+        let ip = document.getElementById("targetIP").value()
         // let endIP = document.getElementById("endIP").value()
         // let ipArray = []
         // ipArray.append(startIP)
