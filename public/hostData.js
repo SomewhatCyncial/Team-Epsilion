@@ -22,8 +22,9 @@ async function requestHostData(ip)
     const response = await fetch('/HostData/' + ip);
 
     if(response.ok) {
-        const hostJson = await response.json();
-        return hostJson;
+        const hostData= await response.json();
+        console.log(hostData);
+        return hostData;
     } else {
         //error handling to be implemented
     }

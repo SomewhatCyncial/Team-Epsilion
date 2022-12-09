@@ -1,4 +1,3 @@
-const fs = require("fs/promises");
 const express = require("express");
 require("dotenv").config()
 const {MongoClient} = require('mongodb');
@@ -128,16 +127,67 @@ server.get("/hostData/:ip", async (req, res) => {
     let response = {}
     console.log(ip);
     await (db.collection('hosts').find({ip: ip})).forEach((x) => { //gets data from mongoDB and saves relevent fields in response
-        response['ip'] = x['ip'];
-        response['city'] = x['city'];
-        response['country'] = x['country'];
-        response['latitude'] = x['latitude'];
-        response['longitude'] = x['longitude'];
-        response['hostnames'] = x['hostnames'];
-        response['os'] = x['os'];
-        response['org'] = x['org'];
-        response['ISP'] = x['ISP'];
-        response['ports'] = x['ports'];
+        if(x['ip'] !== undefined) {
+            response['ip'] = x['ip'];
+        } else {
+            response['ip'] = "N/A";
+        }
+
+        if(x['city'] !== undefined) {
+            response['city'] = x['city'];
+        } else {
+            response['city'] = "N/A";
+        }
+        
+        if(x['country_name'] !== undefined) {
+            response['country_name'] = x['country_name'];
+        } else {
+            response['country_name'] = "N/A";
+        }
+
+        if(x['latitude'] !== undefined) {
+            response['latitude'] = x['latitude'];
+        } else {
+            response['latitude'] = "N/A";
+        }
+
+        if(x['longitude'] !== undefined) {
+            response['longitude'] = x['longitude'];
+        } else {
+            response['longitude'] = "N/A";
+        }
+
+        if(x['hostnames'] !== undefined) {
+            response['hostnames'] = x['hostnames'];
+        } else {
+            response['hostnames'] = "N/A";
+        }
+
+        if(x['os'] !== undefined) {
+            response['os'] = x['os'];
+        } else {
+            response['os'] = "N/A";
+        }
+        
+
+        if(x['org'] !== undefined) {
+            response['org'] = x['org'];
+        } else {
+            response['org'] = "N/A";
+        }
+        
+        if(x['isp'] !== undefined) {
+            response['isp'] = x['isp'];
+        } else {
+            response['isp'] = "N/A";
+        }
+        
+        if(x['ports'] !== undefined) {
+            response['ports'] = x['ports'];
+        } else {
+            response['ports'] = [];
+        }
+        
     });
     res.json(response);
 });
