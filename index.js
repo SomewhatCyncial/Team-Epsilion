@@ -15,6 +15,10 @@ Webpage Getters - Used to display specific pages
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 //Login Page
+server.get('/', (req , res) => {
+    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+});
+
 server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
 });
@@ -31,7 +35,7 @@ server.get('/hostData', (req , res) => {
 
 //Vuln Library Page
 server.get('/vulns', (req , res) => {
-    res.sendFile(__dirname +  '/html/hostData.html');
+    res.sendFile(__dirname +  '/html/vulns.html');
 });
 
 
@@ -144,7 +148,7 @@ Vulnerability Data APIs
 
 server.get("/vulns/library", async (req, res) => {
     let response= [];
-    await db.collection('vulns').find().forEach((x) => {
+    await db.collection('vulns').find().sort({port: 1}).forEach((x) => {
         response.push(x);
     });
     res.send(response);

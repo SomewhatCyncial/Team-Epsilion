@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <script type="module" src="/hostData.js" defer></script>
+    <script type="module" src="/vulns.js" defer></script>
   </head>
   <body>
     <div class="container-fluid title-box">
@@ -16,7 +16,7 @@
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-11">
-                    <h2>EPSILON ENUMERATION</h1>
+                    <h1>EPSILON ENUMERATION</h1>
             </div>
             <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                 <nav class="navbar navbar-light navbar-expand-lg rounded float-right">
@@ -42,34 +42,14 @@
             </div>
          </div>
     </div>
-    <div class="row p-3 justify-content-center">
-            <div class="dropdown content">
-                <select class="form-select" type="select" id="selectHost">
-                    <option selected>(Select a Host)</option>
-                </select>
-            </div>
-        </div>
-    <div class = "row justify-content-center">
-            <a href="#" class="link-primary">Edit Host List</a>
-    </div>
     <div class="row p-3">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="container-fluid standard-box rounded">
                 <div class="row p-3 justify-content-center">
-                    <h3>Host Summary</h3>
-                </div>                    
-                <div class="row p-3 justify-content-center">
-                    <p id="hostSummary" class="text-center">No Host currently selected</p>
-                </div>  
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="container-fluid standard-box rounded">
-                <div class="row p-3 justify-content-center">
-                    <h3>Vulnerability Summary</h3>
+                    <h3>Vulnerability Library</h3>
                 </div>
                 <div class="row p-3 justify-content-center">
-                    <table class = "table" id="vulnSummary">
+                    <table class = "table" id = "vulnerabilities">
                         <thead>
                             <tr>
                                 <th scope = "col">Port</th>
