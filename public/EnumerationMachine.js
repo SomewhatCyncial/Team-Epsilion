@@ -1,8 +1,10 @@
 //vulnerability check button (implemented By Bryan) I'm not checking to see of any input is correct or anything yet
 //possible IP addresses
-let API_KEY = "ch4OqIt7AqwXvkB4uxvyL3x0HujgUJxY";//process.env.API_KEY;
+require("dotenv").config()
+let API_KEY = process.env.API_KEY;
 const shodan = "https://api.shodan.io/shodan";
 const {MongoClient} = require('mongodb');
+
 // Class A: 10.0.0.0 — 10.255.255.255
 // Class B: 172.16.0.0 — 172.31.255.255
 // Class C: 192.168.0.0 — 192.168.255.255
@@ -97,7 +99,7 @@ async function ipChecker(){
 
 
 async function main() {
-    const uri = "mongodb+srv://admin:3fKGsY%25*6WrRB6IF@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority";//process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
     const client = new MongoClient(uri);
     try{
         await client.connect()
