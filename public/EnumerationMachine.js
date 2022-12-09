@@ -1,6 +1,6 @@
 //vulnerability check button (implemented By Bryan) I'm not checking to see of any input is correct or anything yet
 //possible IP addresses
-let API_KEY = process.env.API_KEY;
+let API_KEY = "ch4OqIt7AqwXvkB4uxvyL3x0HujgUJxY";//process.env.API_KEY;
 const shodan = "https://api.shodan.io/shodan";
 // Class A: 10.0.0.0 — 10.255.255.255
 // Class B: 172.16.0.0 — 172.31.255.255
@@ -75,6 +75,7 @@ async function ipChecker(){
             scanStatus = scanStatus(scanID);
         }
         hostData = getShodanData(IPS);
+        //check if IP is already 
         db.collection("hosts").insertOne(hostData);
         // const response = await fetch(`https://api.shodan.io/shodan/scan?key=${API_KEY}`,{
         //     method: 'POST',
