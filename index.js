@@ -26,7 +26,7 @@ server.get('/EnumerationMachine', (req , res) => {
 
 //Host Data Page
 server.get('/HostData', (req , res) => {
-    res.sendFile(__dirname +  '/html/EnumerationMachine - Host Data.html');
+    res.sendFile(__dirname +  '/html/hostData.html');
 });
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
