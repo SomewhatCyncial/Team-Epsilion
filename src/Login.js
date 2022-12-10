@@ -1,5 +1,7 @@
-const username = document.getElementById("username").value;
-const password = document.getElementById('password').value;
+const username = document.getElementById("login_username").value;
+const password = document.getElementById('login_password').value;
+const reg_user = document.getElementById("reg_username").value;
+const reg_pass = document.getElementById('reg_password').value;
 
 
 // Login Function
@@ -19,6 +21,27 @@ function Login(){
         }
         else{
             console.log("Login Failure");
+        }
+
+    });
+}
+
+function Register(){
+    document.getElementById("register").addEventListener('click', async () =>{
+        let client = {username: reg_user, password: reg_pass};
+        const response = await fetch('/login/signup',{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(client)
+        });
+        
+        if (response.ok){
+            console.log("Register Success");
+        }
+        else{
+            console.log("Register Failure");
         }
 
     });
