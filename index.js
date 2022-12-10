@@ -1,5 +1,6 @@
 const { response } = require("express");
 const express = require("express");
+const session = require('express-session')
 require("dotenv").config()
 const {MongoClient, ConnectionPoolReadyEvent} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
@@ -9,6 +10,11 @@ let db = null;
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
+
+// For LoggedIn Autherization
+server.use(session({secret:'Keep it secret'
+,name:'uniqueSessionID'
+,saveUninitialized:false}))
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters - Used to display specific pages
@@ -21,6 +27,34 @@ server.get('/', (req , res) => {
 
 server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+});
+
+//Login Autherization
+server.use('/EnumerationMachine', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+server.use('/hostData', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+server.use('/vulns', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
 });
 
 //Home Page
@@ -51,6 +85,7 @@ server.post("/login/check", async (req,res) => {
     let response = await db.collection("login").find({username : user, password : pass});
     if (response.length === 1){
         console.log("Login Success");
+        req.session.loggedIn = true;
         res.redirect('/EnumerationMachine');
     }
     else{
@@ -70,7 +105,7 @@ server.post("/login/signup", async (req,res) =>{
     else{
         console.log('Sign up Failure: Username Already Exists');
     }
-    res.redirect("/login");
+    res.redirect("/EnumerationMachine");
 });
 
 // Update a client's login data - Wenxiao
