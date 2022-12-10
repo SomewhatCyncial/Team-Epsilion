@@ -30,14 +30,14 @@ server.get('/login', (req , res) => {
 });
 
 //Login Autherization
-// server.use('/EnumerationMachine', function (req , res , next){
-//     if (req.session.loggedIn){
-//         next();
-//     }
-//     else{
-//         res.redirect('/login');
-//     }
-// });
+server.use('/EnumerationMachine', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
+});
 
 server.use('/hostData', function (req , res , next){
     if (req.session.loggedIn){
