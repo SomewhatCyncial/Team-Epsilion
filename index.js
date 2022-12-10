@@ -69,7 +69,7 @@ server.post("/login/signup", async (req,res) =>{
     else{
         console.log('Sign up Failure: Username Already Exists');
     }
-    res.redirect("/login");
+    res.redirect("/EnumerationMachine");
 });
 
 // Update a client's login data - Wenxiao
