@@ -84,6 +84,7 @@ server.post("/login/check", async (req,res) => {
     let response = await db.collection("login").find({username : user, password : pass});
     if (response.length === 1){
         console.log("Login Success");
+        req.session.loggedIn = true;
         res.redirect('/EnumerationMachine');
     }
     else{
