@@ -1,8 +1,9 @@
+const { response } = require("express");
 const express = require("express");
 require("dotenv").config()
-const {MongoClient} = require('mongodb');
+const {MongoClient, ConnectionPoolReadyEvent} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
-const apiKey = "";
+const apiKey = process.env.API_KEY;
 let db = null;
 
 const server = express();
@@ -208,27 +209,32 @@ server.get("/vulns/library", async (req, res) => {
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Shodan Code - Working
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
 //This function starts a scan of an ip(s) and returns the scan id. - Alex 
 //ips is an array of ip values
-async function startShodanScan(ips)
+async function startShodanScan(ip)
 {
-    ips.toString();
+    ip.toString();
     const response = await fetch(shodan + '/scan?key=' + apiKey, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'ips= ' + ips
+        body: 'ips= ' + ip
     });
 
     if(response.ok) {
         const scanData = await response.json(); //JSON object with scan id and number of ips scanned
+        console.log(scanData);
         let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
-        db.collection("scans").insertOne(newScan); //add object to mongo
+        let mongoResponse = await db.collection("scans").insertOne(newScan); //add object to mongo
+        console.log(mongoResponse);
         return scanData.id; //return id on started scan
     } else {
         //error handling to be implemented
+        console.log("scan status not ok")
         return null;
     }
 }
@@ -242,6 +248,7 @@ async function scanStatus(id)
         const scanData = await response.json()
         return scanData.status;
     } else {
+        console.log(response);
         //error handling to be implemented
         return null;
     }
@@ -251,16 +258,69 @@ async function scanStatus(id)
 //Respones format found on https://developer.shodan.io/api
 async function getShodanData(ip)
 {
+    console.log(ip);
     const response = await fetch(shodan + '/host/' + ip + '?key=' + apiKey);
 
     if(response.ok) {
         const hostData = await response.json(); //JSON object of host data
+        console.log(hostData);
         return hostData;
     } else {
+        console.log("error getting shodan data");
         //error handling to be implemented
         return null;
     }
 }
+
+async function ipChecker(ip){
+    try{
+        const testData = await getShodanData(ip);
+        console.log(testData);
+        let scanID = await startShodanScan(ip);
+        console.log("scanID: ", scanID);
+        if(scanID === null){
+            return null;
+        }
+        let scanStatusResponse = await scanStatus(scanID);
+        let scanCounter = 0;
+        while(scanStatusResponse !== "DONE" || scanCounter > 10){
+            if(scanStatusResponse !== "DONE"){
+                await sleep(2000);
+            }
+            scanStatusResponse = await scanStatus(scanID);
+            console.log(scanStatusResponse);
+            scanCounter++;
+        }
+        const hostData = await getShodanData(ip);
+        //check if IP is already 
+        let mongoResponse = await db.collection("hosts").insertOne(hostData);
+        console.log(mongoResponse);
+        return scanStatusResponse;
+    }
+    catch(error){
+        console.log(error);
+        return null;
+    }
+}
+
+server.post("/enumerationmachine/:ip", async (req, res) => {
+    let ip = req.params.ip;
+    console.log(ip);
+    // let publicIPRegex = /(^0\.)|(^10\.)|(^100\.6[4-9]\.)|(^100\.[7-9]\d\.)|(^100\.1[0-1]\d\.)|(^100\.12[0-7]\.)|(^127\.)|(^169\.254\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.0\.0\.)|(^192\.0\.2\.)|(^192\.88\.99\.)|(^192\.168\.)|(^198\.1[8-9]\.)|(^198\.51\.100\.)|(^203.0\.113\.)|(^22[4-9]\.)|(^23[0-9]\.)|(^24[0-9]\.)|(^25[0-5]\.)/;
+    // if(!publicIPRegex.test(ip)){
+    //     console.log("invalid IP")
+    //     res.json({messsage: "invalid IP"})
+    // }
+    let response =await ipChecker(ip);
+    console.log(response); 
+    if(response){
+        res.json({message: response});
+    }
+    else{
+        res.json({message: "Error Scan Unsuccessful"})
+    }
+});
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Main
