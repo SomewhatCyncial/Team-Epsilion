@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session')
 require("dotenv").config()
 const {MongoClient} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
@@ -8,6 +9,11 @@ let db = null;
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
+
+// For LoggedIn Autherization
+server.use(session({secret:'Keep it secret'
+,name:'uniqueSessionID'
+,saveUninitialized:false}))
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters - Used to display specific pages
@@ -20,6 +26,34 @@ server.get('/', (req , res) => {
 
 server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+});
+
+//Login Autherization
+server.use('/EnumerationMachine', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+server.use('/hostData', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+server.use('/vulns', function (req , res , next){
+    if (req.session.loggedIn){
+        next();
+    }
+    else{
+        res.redirect('/login');
+    }
 });
 
 //Home Page
