@@ -30,14 +30,14 @@ server.get('/login', (req , res) => {
 });
 
 //Login Autherization
-server.use('/EnumerationMachine', function (req , res , next){
-    if (req.session.loggedIn){
-        next();
-    }
-    else{
-        res.redirect('/login');
-    }
-});
+// server.use('/EnumerationMachine', function (req , res , next){
+//     if (req.session.loggedIn){
+//         next();
+//     }
+//     else{
+//         res.redirect('/login');
+//     }
+// });
 
 server.use('/hostData', function (req , res , next){
     if (req.session.loggedIn){
@@ -244,6 +244,7 @@ server.get("/vulns/library", async (req, res) => {
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Shodan Code - Working
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+// sleep function -Bryan
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
  }
@@ -262,10 +263,10 @@ async function startShodanScan(ip)
 
     if(response.ok) {
         const scanData = await response.json(); //JSON object with scan id and number of ips scanned
-        console.log(scanData);
+        //console.log(scanData);
         let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
         let mongoResponse = await db.collection("scans").insertOne(newScan); //add object to mongo
-        console.log(mongoResponse);
+        //console.log(mongoResponse);
         return scanData.id; //return id on started scan
     } else {
         //error handling to be implemented
@@ -298,21 +299,21 @@ async function getShodanData(ip)
 
     if(response.ok) {
         const hostData = await response.json(); //JSON object of host data
-        console.log(hostData);
+        //console.log(hostData);
         return hostData;
     } else {
         console.log("error getting shodan data");
         //error handling to be implemented
-        return null;
+        throw new Error("error getting shodan data");
     }
 }
 
 async function ipChecker(ip){
     try{
-        const testData = await getShodanData(ip);
-        console.log(testData);
+        //const testData = await getShodanData(ip);
+        //console.log(testData);
         let scanID = await startShodanScan(ip);
-        console.log("scanID: ", scanID);
+        //console.log("scanID: ", scanID);
         if(scanID === null){
             return null;
         }
@@ -327,9 +328,15 @@ async function ipChecker(ip){
             scanCounter++;
         }
         const hostData = await getShodanData(ip);
-        //check if IP is already 
-        let mongoResponse = await db.collection("hosts").insertOne(hostData);
-        console.log(mongoResponse);
+        //check if IP is already in database and replace with new info
+        // let ipInMongo = await db.collection("hosts").findOne({ip})
+        // console.log(ipInMongo);
+
+        if (hostData){
+            console.log("ip for Mongo: ", ip);
+            let mongoResponse = await db.collection("hosts").findOneAndUpdate({ip_str: ip}, {$set: hostData}, {upsert:true,new:true});
+            console.log(mongoResponse);
+        }
         return scanStatusResponse;
     }
     catch(error){
