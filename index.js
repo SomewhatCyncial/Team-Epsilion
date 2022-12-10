@@ -265,7 +265,7 @@ async function startShodanScan(ip)
         const scanData = await response.json(); //JSON object with scan id and number of ips scanned
         //console.log(scanData);
         let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
-        let mongoResponse = await db.collection("scans").insertOne(newScan); //add object to mongo
+        await db.collection("scans").insertOne(newScan); //add object to mongo
         //console.log(mongoResponse);
         return scanData.id; //return id on started scan
     } else {
@@ -333,9 +333,9 @@ async function ipChecker(ip){
         // console.log(ipInMongo);
 
         if (hostData){
-            console.log("ip for Mongo: ", ip);
+            //console.log("ip for Mongo: ", ip);
             let mongoResponse = await db.collection("hosts").findOneAndUpdate({ip_str: ip}, {$set: hostData}, {upsert:true,new:true});
-            console.log(mongoResponse);
+            //console.log(mongoResponse);
         }
         return scanStatusResponse;
     }
