@@ -149,8 +149,7 @@ Host Data APIs
 //Host Data Page: Returns list of hosts in db - Alex
 server.get("/hostData/hostList", async (req, res) => {
     let response = [];
-    let currentUser = 'testUser'; //static entry until usernames implemented
-    await db.collection('hosts').find().forEach((x) => {
+    await db.collection('hosts').find({user: req.session.user}).forEach((x) => {
         response.push(x['ip_str']);
     }); // get all hosts created by current user then add their hostname to the response
     res.send(response);
