@@ -4,7 +4,6 @@ const session = require('express-session')
 require("dotenv").config()
 const {MongoClient, ConnectionPoolReadyEvent} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
-const apiKey = process.env.API_KEY;
 let db = null;
 
 const server = express();
@@ -281,7 +280,7 @@ Shodan.io Code
 async function startShodanScan(ip)
 {
     ip.toString(); //turn ip in to string
-    const response = await fetch(shodan + '/scan?key=' + apiKey, {
+    const response = await fetch(shodan + '/scan?key=' + process.env.API_KEY, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -304,7 +303,7 @@ async function startShodanScan(ip)
 //This function gets the status of a current Shodan scan using its id. A completed scan will be makred as "DONE" - Alex
 async function scanStatus(id)
 {
-    const response = await fetch(shodan + '/scan/' + id + '?key=' + apiKey)
+    const response = await fetch(shodan + '/scan/' + id + '?key=' + process.env.API_KEY)
 
     if(response.ok) {
         const scanData = await response.json()
@@ -320,7 +319,7 @@ async function scanStatus(id)
 async function getShodanData(ip)
 {
     console.log(ip);
-    const response = await fetch(shodan + '/host/' + ip + '?key=' + apiKey);
+    const response = await fetch(shodan + '/host/' + ip + '?key=' + process.env.API_KEY);
 
     if(response.ok) {
         const hostData = await response.json(); //JSON object of host data
