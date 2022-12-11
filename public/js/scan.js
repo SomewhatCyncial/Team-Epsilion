@@ -22,7 +22,7 @@ async function ipChecker(){
             location.reload();
         }
         else{
-            alert("Scan unsuccessful");
+            alert("Shodan had an error when trying to scan this IP");
         }
 
     });
