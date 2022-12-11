@@ -57,14 +57,14 @@ Database
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Our team used mongoDB Atlas for out database. Our app uses four collections:
 
-Credentials: This is wear user credentials are stored
-{ 
+Credentials: This is wear user credentials are stored \
+{ \
   username: test, \
   passwordHash: 092wq3u4riuajdhnf \
-}
+} \
  
-Hosts: This is where scanned host data is stored.
-{
+Hosts: This is where scanned host data is stored. \
+{ \
   city: "Mountain View" \
   region_code :"CA" \
   os: null \
@@ -84,27 +84,27 @@ Hosts: This is where scanned host data is stored.
   data: Array \
   asn: "AS15169" \
   ip_str: "8.8.8.8" \
-}
+} \
 
-scans: This is where the ip of a scanned host and its assocaied scan idea are saved
+scans: This is where the ip of a scanned host and its assocaied scan idea are saved \
 
-{
+{ \
   ip: "8.8.8.8" \
   scan: "tW5qN2N7aot9VzdS" \
-}
+} \
 
-vulns: This is were all the currenlty reconginzed vulnerabilites are saved
-{
-  port: 20 \
-  protocol: TP" \
-  vuln: ray \
-    0: Brute Forcing Passwords" \
-    1: "Anonymous Authentication" \
-    2: "Cross-site Scripting" \
-    3: "Directory Traversal" \
-    4: "Amanda Trojan" \
-    5: "Senna Spy FTP" \
- }
+vulns: This is were all the currenlty reconginzed vulnerabilites are saved \
+{ \
+emsp  port: 20 \
+emsp  protocol: TP" \
+emsp  vuln: ray \
+emsp emsp   0: Brute Forcing Passwords" \
+emsp emsp   1: "Anonymous Authentication" \
+emsp emsp   2: "Cross-site Scripting" \
+emsp emsp   3: "Directory Traversal" \
+emsp emsp  4: "Amanda Trojan" \
+emsp emsp   5: "Senna Spy FTP" \
+ } \
 
 Routes
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
