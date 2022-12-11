@@ -59,51 +59,51 @@ Our team used mongoDB Atlas for out database. Our app uses four collections:
 
 Credentials: This is wear user credentials are stored
 { 
-  username: test, 
-  passwordHash: 092wq3u4riuajdhnf
+  username: test, \
+  passwordHash: 092wq3u4riuajdhnf \
 }
  
 Hosts: This is where scanned host data is stored.
 {
-  city: "Mountain View"
-  region_code :"CA"
-  os: null
-  tags: Array
-  ip: 134744072
-  isp: "Google LLC"
-  area_code: null
-  longitude: -122.0775
-  last_update: "2022-12-11T05:53:49.844289"
-  ports: Array
-  latitude: 37.4056
-  hostnames: Array
-  country_code: "US"
-  country_name: "United States"
-  domains: Array
-  org: "Google LLC"
-  data: Array
-  asn: "AS15169"
-  ip_str: "8.8.8.8"
+  city: "Mountain View" \
+  region_code :"CA" \
+  os: null \
+  tags: Array \
+  ip: 134744072 \
+  isp: "Google LLC" \
+  area_code: null \
+  longitude: -122.0775 \ 
+  last_update: "2022-12-11T05:53:49.844289" \
+  ports: Array \
+  latitude: 37.4056 \
+  hostnames: Array \
+  country_code: "US" \
+  country_name: "United States" \
+  domains: Array \
+  org: "Google LLC" \
+  data: Array \
+  asn: "AS15169" \
+  ip_str: "8.8.8.8" \
 }
 
 scans: This is where the ip of a scanned host and its assocaied scan idea are saved
 
 {
-  ip: "8.8.8.8"
-  scan: "tW5qN2N7aot9VzdS"
+  ip: "8.8.8.8" \
+  scan: "tW5qN2N7aot9VzdS" \
 }
 
 vulns: This is were all the currenlty reconginzed vulnerabilites are saved
 {
-  port: 20
-  protocol: TP"
-  vuln: ray
-    0: Brute Forcing Passwords"
-    1: "Anonymous Authentication"
-    2: "Cross-site Scripting"
-    3: "Directory Traversal"
-    4: "Amanda Trojan"
-    5: "Senna Spy FTP"
+  port: 20 \
+  protocol: TP" \
+  vuln: ray \
+    0: Brute Forcing Passwords" \
+    1: "Anonymous Authentication" \
+    2: "Cross-site Scripting" \
+    3: "Directory Traversal" \
+    4: "Amanda Trojan" \
+    5: "Senna Spy FTP" \
  }
 
 Routes
