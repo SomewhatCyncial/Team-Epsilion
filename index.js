@@ -86,16 +86,16 @@ server.post("/login/check", async (req,res) => {
     
     if(!user) {
         res.send({success: false, message: "Invalid Credentials"})
+    } else {
+        bcrypt.compare(credentials['password'], user['passwordHash'], function(err, result) { 
+            if(result) {
+                req.session.user = credentials['username'];
+                res.send({success: true});
+            } else {
+                res.send({success: false, message: "Invalid Credentials"})
+            }
+        });
     }
-
-    bcrypt.compare(credentials['password'], user['passwordHash'], function(err, result) { 
-        if(result) {
-            req.session.user = credentials['username'];
-            res.send({success: true});
-        } else {
-            res.send({success: false, message: "Invalid Credentials"})
-        }
-    });
 });
 
 // Sign up - Wenxiao (Adding new client to the login data) 
@@ -357,6 +357,7 @@ async function ipChecker(ip){
 
         if (hostData){
             //console.log("ip for Mongo: ", ip);
+            hostData['user'] = req.session.user;
             let mongoResponse = await db.collection("hosts").findOneAndUpdate({ip_str: ip}, {$set: hostData}, {upsert:true,new:true});
             //console.log(mongoResponse);
         }
@@ -366,23 +367,6 @@ async function ipChecker(ip){
         console.log(error);
         return null;
     }
-}
-
-async function checkCredentials(username, password)
-{
-    let user = await db.collection("credentials").findOne({username: username});
-    
-    if(!user) {
-        return false;
-    }
-
-    bcrypt.compare(password, user['passwordHash'], function(err, result) { 
-        if(result) {
-            res.redirect('/scan');
-        } else {
-            res.redirect('/login');
-        }
-    });
 }
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
