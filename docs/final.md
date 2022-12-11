@@ -50,7 +50,7 @@ there be one they know off that is not currenlty in the library. As with previou
 
 ![host_data_page](/public/images/vulnerbility_library_page.JPG)
 
-API's
+Routes
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters
 - '/login': Get's login.html
@@ -58,21 +58,20 @@ Webpage Getters
 - '/hostData': Get's hostData.html
 - '/vulns': Gets vuln.html
 
-Login APIs
+Login Routes
 - /login/check: Verifies that credentials being used to login are valid
 - /login/register: Create's an account for a new user if the credientials don't exist yet
 - /logout: Logout the current user and return to login page
 
-Scan Page APIs
+Scan Page Routes
 - /scan/:ip: Initaties a scan using a provided ip. Sends data to Shodan.io and gets response. Waits for scan to complete and saves hostData in db. If the host already exists it updates the existing document, otherwise it creates a new one
 
-Host Data APIs
+Host Data Routes
 - /hostData/hostList: Returns a list of the current hosts in the database. This is used to update the selection drop down on the Host Data page
 - /hostData/:ip: This queries the database for the data for a specific host (via ip). This information is used to populate the "Host Summary" section on the Host Data page
 - /hostData/remove/:ip: This removes the specified host from the database along with all associated info
 
-Vulnerability Library APIs
-
+Vulnerability Library Routes
 - /vulns/library: This returns a list of everu vulnerability currently in the library. This information is used to populate the "Vulnerability library" section on the Vulnerability Library page
 - /vulns/:string: This takes a user specified vulnerability and adds it to the libarary
 
