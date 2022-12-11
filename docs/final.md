@@ -178,7 +178,7 @@ Bryan
 - wrote code that connected server to mongo database
 - Assisted in creation of data formats and created relevent collections in MongoDB
 - Assisted in database coding for APIs used by Host Data webpage
-- wrote/coded enumerationmachine.js
+- wrote/coded scan.js
 - Integrated the scan feature on the website
 - ensured scan data gets updated and stored
 - adjusted data from shodan to be user specific for the website
