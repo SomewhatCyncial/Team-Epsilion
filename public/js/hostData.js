@@ -4,6 +4,7 @@ const vulnLibrary = await requestVulnData();
 Functions
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+//Get list of Hosts from db -Alex
 async function requestHostList()
 {  
     const response = await fetch('/HostData/hostList')
@@ -17,6 +18,7 @@ async function requestHostList()
     }
 }
 
+//Get data for specified host - Alex
 async function requestHostData(ip)
 {  
     const response = await fetch('/hostData/' + ip);
@@ -30,6 +32,7 @@ async function requestHostData(ip)
     }
 }
 
+//Removed specified host from db - Alex
 async function removeHost(ip)
 {  
     const response = await fetch('/hostData/remove/' + ip);
@@ -43,6 +46,7 @@ async function removeHost(ip)
     }
 }
 
+//Get vulnerbilites for specified host - Alex
 async function requestVulnData(ports)
 {
     const response = await fetch('/vulns/library');
@@ -55,7 +59,6 @@ async function requestVulnData(ports)
         return {};
     }
 }
-
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Event Listeners
@@ -72,27 +75,29 @@ document.getElementById('selectHost').addEventListener("change",async () => {
     let tbody = document.querySelector("tbody");
     tbody.remove();
     tbody = document.createElement("tbody");
-    console.log(vulnLibrary);
-    console.log(hostData);
+
+    //For each vulnerability in the library, check if host is susceptible
     vulnLibrary.forEach((x) => {
-        if(hostData['ports'].indexOf(x['port']) !== -1) {
-            let tr = document.createElement("tr");
-            let port = document.createElement("th");
-            let protocol = document.createElement("td");
-            let vuln = document.createElement("td");
+        if(hostData['ports'].indexOf(x['port']) !== -1) { //if the hosts open port exists in the library
+            let tr = document.createElement("tr"); //create row
+            let port = document.createElement("th"); //create port column
+            let protocol = document.createElement("td"); //create protocol column
+            let vuln = document.createElement("td"); //create vuln column
             
             port.scope = "row";
-            port.innerHTML = x['port'];
+            port.innerHTML = x['port']; //set values
             protocol.innerHTML = x['protocol'];
 
+            //append to new row
             tr.appendChild(port);
             tr.appendChild(protocol);
 
-            if(x['vuln'].length >= 1) {
+            if(x['vuln'].length >= 1) { //if there is more then on vuln for the port
                 vuln.innerHTML = x['vuln'][0];
-                tr.appendChild(vuln);
-                tbody.appendChild(tr);
+                tr.appendChild(vuln); //append to row
+                tbody.appendChild(tr); //append row to table
 
+                //For each additional vuln, create empty port / protocol columns and append them to a new row
                 for(let i = 1; i < x['vuln'].length; i++) {
                     let newtr = document.createElement("tr");
                     let emptyPort = document.createElement("th");
@@ -113,8 +118,9 @@ document.getElementById('selectHost').addEventListener("change",async () => {
             }
         }
     });
-    vulnSummary.appendChild(tbody);
-    
+    vulnSummary.appendChild(tbody); //append to table header
+     
+    //Create html to be added to hostSummary text box
     hostSummary.innerHTML = `
     <div>
         <p class = "text-left">
@@ -131,6 +137,7 @@ document.getElementById('selectHost').addEventListener("change",async () => {
     `;
 });
 
+//Event Listener for when "Edit Host List" is clicked
 document.getElementById('editHostList').addEventListener("click",async () => {
     let ip = document.getElementById('selectHost').value
     removeHost(ip);

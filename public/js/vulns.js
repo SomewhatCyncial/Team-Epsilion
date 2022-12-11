@@ -1,9 +1,10 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+//Request current vulnerability library from db - Alex
 async function requestVulnData(ports)
 {
-    
     const response = await fetch('/vulns/library');
 
     if(response.ok) {
@@ -15,6 +16,7 @@ async function requestVulnData(ports)
     }
 }
 
+//Adds user specified db to library - Alex
 async function addVuln(string)
 {
     const response = await fetch('/vulns/' + string)
@@ -32,22 +34,23 @@ async function addVuln(string)
 Event Listeners
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+//Event Listender for when "Add Vulnerability" is clicked
 document.getElementById('addVuln').addEventListener("click",async () => {
     let port = document.getElementById("port").value;
     let protocol = document.getElementById("protocol").value;
     let vuln = document.getElementById("vuln").value;
 
 
-    if(port ==="" || protocol ==="" || vuln ==="") {
+    if(port ==="" || protocol ==="" || vuln ==="")  { // Verify that the fields have been fileld out by user
         window.alert("Error: All values must be filled out");
-    } else {
-        if(isNaN(port)) {
+    } else { 
+        if(isNaN(port)) { //verify that the provided port is a number
             window.alert("Error: Port must be a number");
         } else {
-            port = parseInt(port);
+            port = parseInt(port); 
             let vulnArray = [];
             vulnArray.push(vuln);
-            let string = JSON.stringify({"port": port, "protocol": protocol, "vuln": vulnArray});
+            let string = JSON.stringify({"port": port, "protocol": protocol, "vuln": vulnArray}); //create object from provided data and strinfy it=
             addVuln(string);
         }
     }
@@ -60,28 +63,31 @@ async function main() {
     const vulnLibrary = await requestVulnData();
    
     let vulnerabilities = document.getElementById("vulnerabilities")
-    let tbody = document.querySelector("tbody");
+    let tbody = document.querySelector("tbody"); 
     tbody.remove();
     tbody = document.createElement("tbody");
     
     vulnLibrary.forEach((x) => {
-        let tr = document.createElement("tr");
-        let port = document.createElement("th");
-        let protocol = document.createElement("td");
-        let vuln = document.createElement("td");
+        let tr = document.createElement("tr"); //create new row
+        let port = document.createElement("th"); //create port column
+        let protocol = document.createElement("td"); //create portocol column
+        let vuln = document.createElement("td"); // create vuln column
         
-        port.scope = "row";
-        port.innerHTML = x['port'];
+        port.scope = "row"; 
+        port.innerHTML = x['port']; //set values
         protocol.innerHTML = x['protocol'];
 
-        tr.appendChild(port);
+        //append to new row
+        tr.appendChild(port); 
         tr.appendChild(protocol);
 
-        if(x['vuln'].length >= 1) {
+        
+        if(x['vuln'].length >= 1) { //if there is more then on vuln for the port
             vuln.innerHTML = x['vuln'][0];
-            tr.appendChild(vuln);
-            tbody.appendChild(tr);
+            tr.appendChild(vuln); //append to row
+            tbody.appendChild(tr); //append row to table
 
+            //For each additional vuln, create empty port / protocol columns and append them to a new row
             for(let i = 1; i < x['vuln'].length; i++) {
                 let newtr = document.createElement("tr");
                 let emptyPort = document.createElement("th");
@@ -101,7 +107,7 @@ async function main() {
             tbody.appendChild(tr);
         }
     });
-    vulnerabilities.appendChild(tbody);
+    vulnerabilities.appendChild(tbody); //append to table header
 }
     
 main();

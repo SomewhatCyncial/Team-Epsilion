@@ -255,17 +255,16 @@ server.get("/vulns/library", async (req, res) => {
 
 server.get("/vulns/:string", async (req, res) => {
     const string = req.params.string;
-    let obj = JSON.parse(string);
+    let obj = JSON.parse(string); //parse string in obj
 
-    let response = await db.collection("vulns").findOne({port: obj['port']});
-    console.log("Response: " + response);
-    if(!response) {
+    let response = await db.collection("vulns").findOne({port: obj['port']}); 
+    if(!response) { //if new matching port is found - add a new document tp db
         await db.collection("vulns").insertOne(obj);
-    } else {
-        if(response['protocol'] === obj['vuln'] && response['vuln'].indexOf(obj['vuln'][0]) === -1) {
+    } else { //if a matching port is found
+        if(response['protocol'] === obj['vuln'] && response['vuln'].indexOf(obj['vuln'][0]) === -1) { //If matching port is the same protocol
             response['vuln'].push(obj['vuln'][0]);
             await db.collection("vulns").updateOne({port: obj['port']}, { $set: { "vuln" : response["vuln"]}});
-        } else {
+        } else { //not the same protocol - add a new document for new protocol
             await db.collection("vulns").insertOne(obj);
         }
     }
@@ -281,7 +280,7 @@ Shodan.io Code
 //ips is an array of ip values
 async function startShodanScan(ip)
 {
-    ip.toString();
+    ip.toString(); //turn ip in to string
     const response = await fetch(shodan + '/scan?key=' + apiKey, {
         method: 'POST',
         headers: {
