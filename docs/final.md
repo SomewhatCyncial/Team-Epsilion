@@ -95,15 +95,15 @@ scans: This is where the ip of a scanned host and its assocaied scan idea are sa
 
 vulns: This is were all the currenlty reconginzed vulnerabilites are saved \
 { \
-emsp  port: 20 \
-emsp  protocol: TP" \
-emsp  vuln: ray \
-emsp emsp   0: Brute Forcing Passwords" \
-emsp emsp   1: "Anonymous Authentication" \
-emsp emsp   2: "Cross-site Scripting" \
-emsp emsp   3: "Directory Traversal" \
-emsp emsp  4: "Amanda Trojan" \
-emsp emsp   5: "Senna Spy FTP" \
+  port: 20 \
+  protocol: TP" \
+  vuln: ray \
+    0: Brute Forcing Passwords" \
+    1: "Anonymous Authentication" \
+    2: "Cross-site Scripting" \
+    3: "Directory Traversal" \
+    4: "Amanda Trojan" \
+    5: "Senna Spy FTP" \
  } \
 
 Routes
