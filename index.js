@@ -395,7 +395,7 @@ Main
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 async function main() {
-    const client = new MongoClient("mongodb+srv://admin:XCb3h2tr7Iod1Edw@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority");
+    const client = new MongoClient(process.env.DB);
     try{
         await client.connect()
         db = client.db('enumeration-machine');
