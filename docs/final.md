@@ -182,6 +182,7 @@ Bryan
 - Integrated the scan feature on the website
 - ensured scan data gets updated and stored
 - adjusted data from shodan to be user specific for the website
+- added alerts to error handle
 - added voice input to final video
 
 Wenxiao 
