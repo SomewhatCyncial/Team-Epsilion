@@ -380,7 +380,7 @@ async function checkCredentials(username, password)
         return false;
     }
 
-    let match = bcrypt.compare(password, user['passwordHash'], function(err, result) { 
+    bcrypt.compare(password, user['passwordHash'], function(err, result) { 
         if(result) {
             console.log("Result")
             res.redirect('/scan');
