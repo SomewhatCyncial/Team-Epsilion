@@ -181,6 +181,7 @@ Bryan
 - wrote/coded enumerationmachine.js
 - Integrated the scan feature on the website
 - ensured scan data gets updated and stored
+- adjusted data from shodan to be user specific for the website
 - added voice input to final video
 
 Wenxiao 
