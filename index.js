@@ -350,7 +350,8 @@ async function ipChecker(ip){
             console.log(scanStatusResponse);
             scanCounter++;
         }
-        const hostData = await getShodanData(ip);
+        let hostData = await getShodanData(ip);
+        hostData.user = req.session.user;
         //check if IP is already in database and replace with new info
         // let ipInMongo = await db.collection("hosts").findOne({ip})
         // console.log(ipInMongo);
