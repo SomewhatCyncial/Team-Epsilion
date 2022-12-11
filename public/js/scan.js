@@ -12,17 +12,19 @@ async function ipChecker(){
             alert("Enter valid IP");
             return;
         }
-        let response = await fetch(`/enumerationmachine/${ip}`, {
+        let response = await fetch(`/scan/${ip}`, {
             method: "POST",
         })
         let data = await response.json();
         console.log(data);
         if (data.message === "DONE"){
             alert("Scan successful");
+            location.reload();
         }
         else{
             alert("Scan unsuccessful");
         }
+
     });
 }
 

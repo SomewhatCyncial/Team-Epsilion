@@ -23,16 +23,16 @@ Webpage Getters - Used to display specific pages
 
 //Login Page
 server.get('/', (req , res) => {
-    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+    res.sendFile(__dirname + '/html/login.html');
 });
 
 server.get('/login', (req , res) => {
-    res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
+    res.sendFile(__dirname + '/html/login.html');
 });
 
 /*
 //Login Autherization
-server.use('/EnumerationMachine', function (req , res , next){
+server.use('/scan', function (req , res , next){
     if (req.session.loggedIn){
         next();
     }
@@ -64,8 +64,8 @@ server.use('/vulns', function (req , res , next){
 */
 
 //Home Page
-server.get('/EnumerationMachine', (req , res) => {
-    res.sendFile(__dirname + '/html/EnumerationMachine.html');
+server.get('/scan', (req , res) => {
+    res.sendFile(__dirname + '/html/scan.html');
 });
 
 //Host Data Page
@@ -92,7 +92,7 @@ server.post("/login/check", async (req,res) => {
     if (response.length === 1){
         console.log("Login Success");
         req.session.loggedIn = true;
-        res.redirect('/EnumerationMachine');
+        res.redirect('/scan');
     }
     else{
         console.log("Login Failure");
@@ -107,7 +107,7 @@ server.post("/login/signup", async (req,res) =>{
     if (response.length === 0){
         await db.collection("credentials").insertOne(newClient);
         console.log('Sign up Success');
-        res.redirect("/EnumerationMachine");
+        res.redirect("/scan");
     }
     else{
         console.log('Sign up Failure: Username Already Exists');
@@ -346,7 +346,7 @@ async function ipChecker(ip){
     }
 }
 
-server.post("/enumerationmachine/:ip", async (req, res) => {
+server.post("/scan/:ip", async (req, res) => {
     let ip = req.params.ip;
     console.log(ip);
     // let publicIPRegex = /(^0\.)|(^10\.)|(^100\.6[4-9]\.)|(^100\.[7-9]\d\.)|(^100\.1[0-1]\d\.)|(^100\.12[0-7]\.)|(^127\.)|(^169\.254\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.0\.0\.)|(^192\.0\.2\.)|(^192\.88\.99\.)|(^192\.168\.)|(^198\.1[8-9]\.)|(^198\.51\.100\.)|(^203.0\.113\.)|(^22[4-9]\.)|(^23[0-9]\.)|(^24[0-9]\.)|(^25[0-5]\.)/;
@@ -354,7 +354,7 @@ server.post("/enumerationmachine/:ip", async (req, res) => {
     //     console.log("invalid IP")
     //     res.json({messsage: "invalid IP"})
     // }
-    let response =await ipChecker(ip);
+    let response = await ipChecker(ip);
     console.log(response); 
     if(response){
         res.json({message: response});
