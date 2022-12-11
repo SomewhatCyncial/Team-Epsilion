@@ -332,10 +332,7 @@ function sleep(ms) {
 
 async function ipChecker(ip){
     try{
-        //const testData = await getShodanData(ip);
-        //console.log(testData);
         let scanID = await startShodanScan(ip);
-        //console.log("scanID: ", scanID);
         if(scanID === null){
             return null;
         }
@@ -350,16 +347,10 @@ async function ipChecker(ip){
             scanCounter++;
         }
         let hostData = await getShodanData(ip);
-        hostData.user = req.session.user;
         //check if IP is already in database and replace with new info
-        // let ipInMongo = await db.collection("hosts").findOne({ip})
-        // console.log(ipInMongo);
-
         if (hostData){
-            //console.log("ip for Mongo: ", ip);
             hostData['user'] = req.session.user;
             let mongoResponse = await db.collection("hosts").findOneAndUpdate({ip_str: ip}, {$set: hostData}, {upsert:true,new:true});
-            //console.log(mongoResponse);
         }
         return scanStatusResponse;
     }
