@@ -107,11 +107,11 @@ server.post("/login/signup", async (req,res) =>{
     if (response.length === 0){
         await db.collection("credentials").insertOne(newClient);
         console.log('Sign up Success');
+        res.redirect("/EnumerationMachine");
     }
     else{
         console.log('Sign up Failure: Username Already Exists');
     }
-    res.redirect("/EnumerationMachine");
 });
 
 // Update a client's login data - Wenxiao
