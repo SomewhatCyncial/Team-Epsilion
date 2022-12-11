@@ -75,9 +75,11 @@ button{
 	height: 450px;
 	padding: 50px 150px;
 	background: rgba(255, 255, 255, 0.457);
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
 	border-radius: 8px;
     margin: auto;
-	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
