@@ -382,9 +382,7 @@ Main
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 async function main() {
-
-    const uri = "mongodb+srv://admin:3fKGsY%25*6WrRB6IF@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority"
-    const client = new MongoClient(uri);
+    const client = new MongoClient(process.env.DB);
     try{
         await client.connect()
         db = client.db('enumeration-machine');
