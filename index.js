@@ -101,7 +101,6 @@ server.post("/login/check", async (req,res) => {
 // Sign up - Wenxiao (Adding new client to the login data) 
 server.post("/login/register", async (req,res) =>{
     let credentials = req.body;
-    console.log(credentials['username']);
     let response = await db.collection("credentials").findOne({username: credentials['username']});
     if (!response) {
         let hash = bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -312,7 +311,6 @@ async function scanStatus(id)
 //Respones format found on https://developer.shodan.io/api
 async function getShodanData(ip)
 {
-    console.log(ip);
     const response = await fetch(shodan + '/host/' + ip + '?key=' + process.env.API_KEY);
 
     if(response.ok) {
@@ -373,8 +371,6 @@ async function ipChecker(ip){
 async function checkCredentials(username, password)
 {
     let user = await db.collection("credentials").findOne({username: username});
-    console.log("Username: " + username + ", Password: " + password);
-    console.log("Username: " + user['username'] + ", Password: " + user['passwordHash']);
     
     if(!user) {
         return false;
@@ -382,7 +378,6 @@ async function checkCredentials(username, password)
 
     bcrypt.compare(password, user['passwordHash'], function(err, result) { 
         if(result) {
-            console.log("Result")
             res.redirect('/scan');
         } else {
             res.redirect('/login');

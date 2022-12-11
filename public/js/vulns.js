@@ -22,7 +22,6 @@ async function addVuln(string)
     const response = await fetch('/vulns/' + string)
 
     if(response.ok) {
-        console.log("Response: " + response);
         window.alert("New Vulnerabiltiy added successfully");
         location.reload();
     } else {
