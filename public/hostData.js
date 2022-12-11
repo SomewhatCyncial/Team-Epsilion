@@ -19,33 +19,41 @@ async function requestHostList()
 
 async function requestHostData(ip)
 {  
-    const response = await fetch('/HostData/' + ip);
+    const response = await fetch('/hostData/' + ip);
 
     if(response.ok) {
         const hostData= await response.json();
-        console.log(hostData);
         return hostData;
     } else {
-        //error handling to be implemented
+        window.alert("There was an error. Response.status: " + response.status);
+        return {};
     }
 }
 
 async function requestVulnData(ports)
 {
-    
     const response = await fetch('/vulns/library');
 
     if(response.ok) {
         const vulnsJson = await response.json();
         return vulnsJson;
     } else {
-        //error handling to be implemented
+        window.alert("There was an error. Response.status: " + response.status);
+        return {};
     }
 }
 
-async function removeHost()
+async function removeHost(ip)
 {  
-
+    const response = await fetch('/hostData/remove/' + ip);
+    
+    if(response.ok) {
+        location.reload();
+        window.alert(ip + " was succesfully removed")
+    } else {
+        window.alert("There was an error. Response.status: " + response.status);
+        return {};
+    }
 }
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -63,6 +71,8 @@ document.getElementById('selectHost').addEventListener("change",async () => {
     let tbody = document.querySelector("tbody");
     tbody.remove();
     tbody = document.createElement("tbody");
+    console.log(vulnLibrary);
+    console.log(hostData);
     vulnLibrary.forEach((x) => {
         if(hostData['ports'].indexOf(x['port']) !== -1) {
             let tr = document.createElement("tr");
@@ -118,6 +128,11 @@ document.getElementById('selectHost').addEventListener("change",async () => {
         </p>
     </div>
     `;
+});
+
+document.getElementById('editHostList').addEventListener("click",async () => {
+    let ip = document.getElementById('selectHost').value
+    removeHost(ip);
 });
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------

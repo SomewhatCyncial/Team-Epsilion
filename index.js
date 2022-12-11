@@ -12,9 +12,10 @@ server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
 
 // For LoggedIn Autherization
-server.use(session({secret:'Keep it secret'
-,name:'uniqueSessionID'
-,saveUninitialized:false}))
+//server.use(session({secret:'Keep it secret'
+//,name:'uniqueSessionID'
+//,resave: true
+//,saveUninitialized:false}))
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters - Used to display specific pages
@@ -29,6 +30,7 @@ server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/EnumerationMachine_LoginPage.html');
 });
 
+/*
 //Login Autherization
 server.use('/EnumerationMachine', function (req , res , next){
     if (req.session.loggedIn){
@@ -39,6 +41,7 @@ server.use('/EnumerationMachine', function (req , res , next){
     }
 });
 
+
 server.use('/hostData', function (req , res , next){
     if (req.session.loggedIn){
         next();
@@ -48,6 +51,8 @@ server.use('/hostData', function (req , res , next){
     }
 });
 
+
+
 server.use('/vulns', function (req , res , next){
     if (req.session.loggedIn){
         next();
@@ -56,6 +61,7 @@ server.use('/vulns', function (req , res , next){
         res.redirect('/login');
     }
 });
+*/
 
 //Home Page
 server.get('/EnumerationMachine', (req , res) => {
@@ -82,7 +88,7 @@ server.post("/login/check", async (req,res) => {
     let client = req.body;
     const user = client[username];
     const pass = client[password];
-    let response = await db.collection("login").find({username : user, password : pass});
+    let response = await db.collection("credentials").find({username : user, password : pass});
     if (response.length === 1){
         console.log("Login Success");
         req.session.loggedIn = true;
@@ -99,7 +105,7 @@ server.post("/login/signup", async (req,res) =>{
     let newClient = req.body;
     let response = await db.collection("credentials").find({username : newClient[username]});
     if (response.length === 0){
-        let response2 = await db.collection("credentials").insertOne(newClient);
+        await db.collection("credentials").insertOne(newClient);
         console.log('Sign up Success');
     }
     else{
@@ -136,14 +142,7 @@ server.post("/hostData/hostList/new", async (req, res) => {
 server.put("/hostData/:_id", async (req, res) => {
     const newHost = req.body
     const _id = req.params._id
-    console.log(_id);
     let response = await db.collection("hosts").updateOne({_id},{$set: newHost})
-    res.json(response);
-});
-//delete a host in hostList - Bryan
-server.delete("/hostData/:_id", async (req, res) => {
-    const _id = req.params._id
-    let response = await db.collection("hosts").deleteOne({_id})
     res.json(response);
 });
 
@@ -151,8 +150,8 @@ server.delete("/hostData/:_id", async (req, res) => {
 server.get("/hostData/hostList", async (req, res) => {
     let response = [];
     let currentUser = 'testUser'; //static entry until usernames implemented
-    await db.collection('hosts').find({user: currentUser}).forEach((x) => {
-        response.push(x['ip']);
+    await db.collection('hosts').find().forEach((x) => {
+        response.push(x['ip_str']);
     }); // get all hosts created by current user then add their hostname to the response
     res.send(response);
 });
@@ -161,64 +160,63 @@ server.get("/hostData/hostList", async (req, res) => {
 server.get("/hostData/:ip", async (req, res) => { 
     const ip = req.params.ip;
     let response = {}
-    console.log(ip);
-    await (db.collection('hosts').find({ip: ip})).forEach((x) => { //gets data from mongoDB and saves relevent fields in response
-        if(x['ip'] !== undefined) {
-            response['ip'] = x['ip'];
+    await (db.collection('hosts').find({ip_str: ip})).forEach((x) => { //gets data from mongoDB and saves relevent fields in response
+        if(x['ip_str'] !== null) {
+            response['ip'] = x['ip_str'];
         } else {
             response['ip'] = "N/A";
         }
 
-        if(x['city'] !== undefined) {
+        if(x['city'] !== null) {
             response['city'] = x['city'];
         } else {
             response['city'] = "N/A";
         }
         
-        if(x['country_name'] !== undefined) {
+        if(x['country_name'] !== null) {
             response['country_name'] = x['country_name'];
         } else {
             response['country_name'] = "N/A";
         }
 
-        if(x['latitude'] !== undefined) {
+        if(x['latitude'] !== null) {
             response['latitude'] = x['latitude'];
         } else {
             response['latitude'] = "N/A";
         }
 
-        if(x['longitude'] !== undefined) {
+        if(x['longitude'] !== null) {
             response['longitude'] = x['longitude'];
         } else {
             response['longitude'] = "N/A";
         }
 
-        if(x['hostnames'] !== undefined) {
+        if(x['hostnames'] !== null) {
             response['hostnames'] = x['hostnames'];
         } else {
             response['hostnames'] = "N/A";
         }
 
-        if(x['os'] !== undefined) {
+        if(x['os'] !== null) {
             response['os'] = x['os'];
         } else {
             response['os'] = "N/A";
         }
         
 
-        if(x['org'] !== undefined) {
+        if(x['org'] !== null) {
             response['org'] = x['org'];
         } else {
             response['org'] = "N/A";
         }
         
-        if(x['isp'] !== undefined) {
+        if(x['isp'] !== null) {
             response['isp'] = x['isp'];
         } else {
             response['isp'] = "N/A";
         }
         
-        if(x['ports'] !== undefined) {
+        if(x['ports'] !== null) {
             response['ports'] = x['ports'];
         } else {
             response['ports'] = [];
@@ -226,6 +224,13 @@ server.get("/hostData/:ip", async (req, res) => {
         
     });
     res.json(response);
+});
+
+//delete a host in hostList - Bryan
+server.get("/hostData/remove/:ip", async (req, res) => {
+    const ip = req.params.ip;
+    let response = await db.collection("hosts").deleteOne({ip_str: ip});
+    res.send(response);
 });
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -263,10 +268,8 @@ async function startShodanScan(ip)
 
     if(response.ok) {
         const scanData = await response.json(); //JSON object with scan id and number of ips scanned
-        //console.log(scanData);
         let newScan = {ip: ip, scan: scanData.id} // create an new object to store in mongo
         await db.collection("scans").insertOne(newScan); //add object to mongo
-        //console.log(mongoResponse);
         return scanData.id; //return id on started scan
     } else {
         //error handling to be implemented
@@ -284,7 +287,6 @@ async function scanStatus(id)
         const scanData = await response.json()
         return scanData.status;
     } else {
-        console.log(response);
         //error handling to be implemented
         return null;
     }
@@ -299,7 +301,6 @@ async function getShodanData(ip)
 
     if(response.ok) {
         const hostData = await response.json(); //JSON object of host data
-        //console.log(hostData);
         return hostData;
     } else {
         console.log("error getting shodan data");
@@ -370,7 +371,7 @@ Main
 
 async function main() {
 
-    const uri = process.env.MONGODB_URI || process.env.MONGO_DEV_URI;
+    const uri = "mongodb+srv://admin:3fKGsY%25*6WrRB6IF@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority"
     const client = new MongoClient(uri);
     try{
         await client.connect()
