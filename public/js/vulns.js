@@ -10,9 +10,48 @@ async function requestVulnData(ports)
         const vulnsJson = await response.json();
         return vulnsJson;
     } else {
-        //error handling to be implemented
+        window.alert("Error - Response Status: " + response.status);
+        return {};
     }
 }
+
+async function addVuln(string)
+{
+    const response = await fetch('/vulns/' + string)
+
+    if(response.ok) {
+        console.log("Response: " + response);
+        window.alert("New Vulnerabiltiy added successfully");
+        location.reload();
+    } else {
+        window.alert("Error - Response Status: " + response.status);
+    }
+}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Event Listeners
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+document.getElementById('addVuln').addEventListener("click",async () => {
+    let port = document.getElementById("port").value;
+    let protocol = document.getElementById("protocol").value;
+    let vuln = document.getElementById("vuln").value;
+
+
+    if(port ==="" || protocol ==="" || vuln ==="") {
+        window.alert("Error: All values must be filled out");
+    } else {
+        if(isNaN(port)) {
+            window.alert("Error: Port must be a number");
+        } else {
+            port = parseInt(port);
+            let vulnArray = [];
+            vulnArray.push(vuln);
+            let string = JSON.stringify({"port": port, "protocol": protocol, "vuln": vulnArray});
+            addVuln(string);
+        }
+    }
+});
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Main

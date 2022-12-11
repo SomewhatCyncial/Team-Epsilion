@@ -129,24 +129,32 @@ server.delete("/login/delete", async (req, res) => {
 });
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Scan Page APIs
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+server.post("/scan/:ip", async (req, res) => {
+    let ip = req.params.ip;
+    console.log(ip);
+    // let publicIPRegex = /(^0\.)|(^10\.)|(^100\.6[4-9]\.)|(^100\.[7-9]\d\.)|(^100\.1[0-1]\d\.)|(^100\.12[0-7]\.)|(^127\.)|(^169\.254\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.0\.0\.)|(^192\.0\.2\.)|(^192\.88\.99\.)|(^192\.168\.)|(^198\.1[8-9]\.)|(^198\.51\.100\.)|(^203.0\.113\.)|(^22[4-9]\.)|(^23[0-9]\.)|(^24[0-9]\.)|(^25[0-5]\.)/;
+    // if(!publicIPRegex.test(ip)){
+    //     console.log("invalid IP")
+    //     res.json({messsage: "invalid IP"})
+    // }
+    let response = await ipChecker(ip);
+    console.log(response); 
+    if(response){
+        res.json({message: response});
+    }
+    else{
+        res.json({message: "Error Scan Unsuccessful"})
+    }
+});
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Host Data APIs
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-// add new Host to hostList - Bryan
-server.post("/hostData/hostList/new", async (req, res) => {
-    let newHost = req.body;
-    let response = await db.collection("hosts").insertOne(newHost);
-    res.json(response);
-});
-// update a host in hostList - Bryan
-server.put("/hostData/:_id", async (req, res) => {
-    const newHost = req.body
-    const _id = req.params._id
-    let response = await db.collection("hosts").updateOne({_id},{$set: newHost})
-    res.json(response);
-});
-
-//Host Data Page: Returns list of hosts in db
+//Host Data Page: Returns list of hosts in db - Alex
 server.get("/hostData/hostList", async (req, res) => {
     let response = [];
     let currentUser = 'testUser'; //static entry until usernames implemented
@@ -156,7 +164,7 @@ server.get("/hostData/hostList", async (req, res) => {
     res.send(response);
 });
 
-//Host Data Page: Returns data for specific host in db
+//Host Data Page: Returns data for specific host in db - Alex
 server.get("/hostData/:ip", async (req, res) => { 
     const ip = req.params.ip;
     let response = {}
@@ -226,7 +234,7 @@ server.get("/hostData/:ip", async (req, res) => {
     res.json(response);
 });
 
-//delete a host in hostList - Bryan
+//Removes a specified host from the db
 server.get("/hostData/remove/:ip", async (req, res) => {
     const ip = req.params.ip;
     let response = await db.collection("hosts").deleteOne({ip_str: ip});
@@ -245,14 +253,30 @@ server.get("/vulns/library", async (req, res) => {
     res.send(response);
 });
 
+server.get("/vulns/:string", async (req, res) => {
+    const string = req.params.string;
+    let obj = JSON.parse(string);
+
+    let response = await db.collection("vulns").findOne({port: obj['port']});
+    console.log("Response: " + response);
+    if(!response) {
+        await db.collection("vulns").insertOne(obj);
+    } else {
+        if(response['protocol'] === obj['vuln'] && response['vuln'].indexOf(obj['vuln'][0]) === -1) {
+            response['vuln'].push(obj['vuln'][0]);
+            await db.collection("vulns").updateOne({port: obj['port']}, { $set: { "vuln" : response["vuln"]}});
+        } else {
+            await db.collection("vulns").insertOne(obj);
+        }
+    }
+
+    res.send("success");
+});
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
-Shodan Code - Working
+Shodan.io Code
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
-// sleep function -Bryan
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
- }
+
 //This function starts a scan of an ip(s) and returns the scan id. - Alex 
 //ips is an array of ip values
 async function startShodanScan(ip)
@@ -309,6 +333,14 @@ async function getShodanData(ip)
     }
 }
 
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Functions
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+// sleep function -Bryan
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
 async function ipChecker(ip){
     try{
         //const testData = await getShodanData(ip);
@@ -345,25 +377,6 @@ async function ipChecker(ip){
         return null;
     }
 }
-
-server.post("/scan/:ip", async (req, res) => {
-    let ip = req.params.ip;
-    console.log(ip);
-    // let publicIPRegex = /(^0\.)|(^10\.)|(^100\.6[4-9]\.)|(^100\.[7-9]\d\.)|(^100\.1[0-1]\d\.)|(^100\.12[0-7]\.)|(^127\.)|(^169\.254\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.0\.0\.)|(^192\.0\.2\.)|(^192\.88\.99\.)|(^192\.168\.)|(^198\.1[8-9]\.)|(^198\.51\.100\.)|(^203.0\.113\.)|(^22[4-9]\.)|(^23[0-9]\.)|(^24[0-9]\.)|(^25[0-5]\.)/;
-    // if(!publicIPRegex.test(ip)){
-    //     console.log("invalid IP")
-    //     res.json({messsage: "invalid IP"})
-    // }
-    let response = await ipChecker(ip);
-    console.log(response); 
-    if(response){
-        res.json({message: response});
-    }
-    else{
-        res.json({message: "Error Scan Unsuccessful"})
-    }
-});
-
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Main

@@ -42,6 +42,31 @@
             </div>
          </div>
     </div>
+    <div class="row p-3 justify-content-center" >
+        <button type="button" class="btn btn-secondary rounded" data-toggle="modal" data-target="#newVulnModal">New Vulnerability</button>
+    </div>
+    <div class="modal fade" id="newVulnModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title">Add a new Vulnerability</h3>
+              <button type="button" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <span>Port:</span>
+                <input type="text" class="form-control" placeholder="Port" id="port" value="">
+                <span>Protocol:</span>
+                <input type="text" class="form-control" placeholder="Protocol" id="protocol" value="">
+                <span>Vulnerability:</span>
+                <input type="text" class="form-control" placeholder="Vulnerability" id="vuln" value="">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="addVuln">Add Vulnerability</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="row p-3">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="container-fluid standard-box rounded">

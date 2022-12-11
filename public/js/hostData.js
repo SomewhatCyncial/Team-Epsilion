@@ -30,19 +30,6 @@ async function requestHostData(ip)
     }
 }
 
-async function requestVulnData(ports)
-{
-    const response = await fetch('/vulns/library');
-
-    if(response.ok) {
-        const vulnsJson = await response.json();
-        return vulnsJson;
-    } else {
-        window.alert("There was an error. Response.status: " + response.status);
-        return {};
-    }
-}
-
 async function removeHost(ip)
 {  
     const response = await fetch('/hostData/remove/' + ip);
@@ -51,10 +38,24 @@ async function removeHost(ip)
         location.reload();
         window.alert(ip + " was succesfully removed")
     } else {
-        window.alert("There was an error. Response.status: " + response.status);
+        window.alert("Error - Response.status: " + response.status);
         return {};
     }
 }
+
+async function requestVulnData(ports)
+{
+    const response = await fetch('/vulns/library');
+
+    if(response.ok) {
+        const vulnsJson = await response.json();
+        return vulnsJson;
+    } else {
+        window.alert("Error - Response.status: " + response.status);
+        return {};
+    }
+}
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Event Listeners
