@@ -1,20 +1,23 @@
 const { response } = require("express");
 const express = require("express");
-const session = require('express-session')
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 require("dotenv").config()
 const {MongoClient, ConnectionPoolReadyEvent} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
+const saltRounds = 10;
 let db = null;
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
 server.use(express.json());
 
-// For LoggedIn Autherization
-//server.use(session({secret:'Keep it secret'
-//,name:'uniqueSessionID'
-//,resave: true
-//,saveUninitialized:false}))
+//For LoggedIn Autherization
+server.use(session({
+    secret: 'keep it secret',
+    resave: false,
+    saveUninitialized: true
+  }))
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters - Used to display specific pages
@@ -29,38 +32,32 @@ server.get('/login', (req , res) => {
     res.sendFile(__dirname + '/html/login.html');
 });
 
-/*
+
 //Login Autherization
 server.use('/scan', function (req , res , next){
-    if (req.session.loggedIn){
+    if (req.session.user !== null) {
         next();
-    }
-    else{
+    } else {
         res.redirect('/login');
     }
 });
-
 
 server.use('/hostData', function (req , res , next){
-    if (req.session.loggedIn){
+    if (req.session.user) {
         next();
-    }
-    else{
+    } else {
         res.redirect('/login');
     }
 });
-
-
 
 server.use('/vulns', function (req , res , next){
-    if (req.session.loggedIn){
+    if (req.session.user) {
         next();
-    }
-    else{
+    } else {
         res.redirect('/login');
     }
 });
-*/
+
 
 //Home Page
 server.get('/scan', (req , res) => {
@@ -84,47 +81,44 @@ Login Page APIs
 
 // Read and check in the Login Page - Wenxiao
 server.post("/login/check", async (req,res) => {
-    let client = req.body;
-    const user = client[username];
-    const pass = client[password];
-    let response = await db.collection("credentials").find({username : user, password : pass});
-    if (response.length === 1){
-        console.log("Login Success");
-        req.session.loggedIn = true;
-        res.redirect('/scan');
+    let credentials = req.body;
+    let user = await db.collection("credentials").findOne({username: credentials['username']});
+    
+    if(!user) {
+        res.send({success: false, message: "Invalid Credentials"})
     }
-    else{
-        console.log("Login Failure");
-        res.redirect('/login');
-    }
+
+    bcrypt.compare(credentials['password'], user['passwordHash'], function(err, result) { 
+        if(result) {
+            req.session.user = credentials['username'];
+            res.send({success: true});
+        } else {
+            res.send({success: false, message: "Invalid Credentials"})
+        }
+    });
 });
 
 // Sign up - Wenxiao (Adding new client to the login data) 
-server.post("/login/signup", async (req,res) =>{
-    let newClient = req.body;
-    let response = await db.collection("credentials").find({username : newClient[username]});
-    if (response.length === 0){
-        await db.collection("credentials").insertOne(newClient);
-        console.log('Sign up Success');
-        res.redirect("/scan");
+server.post("/login/register", async (req,res) =>{
+    let credentials = req.body;
+    console.log(credentials['username']);
+    let response = await db.collection("credentials").findOne({username: credentials['username']});
+    if (!response) {
+        let hash = bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(credentials['password'], salt, async function(err, hash) {
+                await db.collection("credentials").insertOne({"username": credentials['username'], "passwordHash": hash});
+            });
+        });
+        res.send({success: true, message: "Successfully Registered" })
+    } else {
+        res.send({success: false, message: "Username Already Exists. Please Try Again"});
     }
-    else{
-        console.log('Sign up Failure: Username Already Exists');
-    }
-});
-
-// Update a client's login data - Wenxiao
-server.put("/login/update", async (req, res) => {
-    const newClient = req.body;
-    let response = await db.collection("credentials").update({username: newClient[username]}, {$set: newClient});
-    res.json(response);
 });
 
 // Delete a client's login data - Wenxiao
-server.delete("/login/delete", async (req, res) => {
-    const _id = req.params._id;
-    let response = await db.collection("credentials").deleteOne({_id});
-    res.json(response);
+server.get("/logout", async (req, res) => {
+    req.session.user = null;
+    res.redirect('/login');
 });
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -376,12 +370,32 @@ async function ipChecker(ip){
     }
 }
 
+async function checkCredentials(username, password)
+{
+    let user = await db.collection("credentials").findOne({username: username});
+    console.log("Username: " + username + ", Password: " + password);
+    console.log("Username: " + user['username'] + ", Password: " + user['passwordHash']);
+    
+    if(!user) {
+        return false;
+    }
+
+    let match = bcrypt.compare(password, user['passwordHash'], function(err, result) { 
+        if(result) {
+            console.log("Result")
+            res.redirect('/scan');
+        } else {
+            res.redirect('/login');
+        }
+    });
+}
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------
 Main
 ---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 async function main() {
-    const client = new MongoClient(process.env.DB);
+    const client = new MongoClient("mongodb+srv://admin:XCb3h2tr7Iod1Edw@epsilon.knsfbnb.mongodb.net/?retryWrites=true&w=majority");
     try{
         await client.connect()
         db = client.db('enumeration-machine');

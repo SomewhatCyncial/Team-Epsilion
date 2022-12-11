@@ -1,50 +1,61 @@
-const username = document.getElementById("login_username").value;
-const password = document.getElementById('login_password').value;
-const reg_user = document.getElementById("reg_username").value;
-const reg_pass = document.getElementById('reg_password').value;
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Functions
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-// For account password encryption
-const crypto = require('crypto');
-
-// Login Function
-function Login(){
-    document.getElementById("login").addEventListener('click', async () =>{
-        let client = {username: username, password: crypto.createHash('sha256').update(password).digest('hex')};
-        const response = await fetch('/login/check',{
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(client)
-        });
-        
-        if (response.ok){
-            console.log("Login Success");
+async function login(credentials) {
+    const response = await fetch('/login/check', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: credentials
+    })
+    .then(response => response.json())
+    .then(result => {
+        if(result.success) { 
+            window.location.replace('/scan');
+        } else {
+            window.alert(result.message);
         }
-        else{
-            console.log("Login Failure");
-        }
-
-    });
+    })
 }
 
-function Register(){
-    document.getElementById("register").addEventListener('click', async () =>{
-        let client = {username: reg_user, password: crypto.createHash('sha256').update(reg_pass).digest('hex')};
-        const response = await fetch('/login/signup',{
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(client)
-        });
-        
-        if (response.ok){
-            console.log("Register Success");
+async function register(credentials) {
+    const response = await fetch('/login/register', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: credentials
+    })
+    .then(response => response.json())
+    .then(result => {
+        if(result.success) { 
+            window.alert(result.message)
+        } else {
+            window.alert(result.message);
         }
-        else{
-            console.log("Register Failure");
-        }
-
-    });
+    })
 }
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------
+Event Listeners
+---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+document.getElementById("login").addEventListener('click', async () =>{
+    if(document.getElementById("login_username").value === "" || document.getElementById('login_password').value === "") {
+        window.alert("Error: All fields must be filled out");
+    } else {
+        let credentials  = { username: document.getElementById("login_username").value, password: document.getElementById('login_password').value };
+        login(JSON.stringify(credentials));
+    }
+});
+
+document.getElementById("register").addEventListener('click', async () =>{
+    if(document.getElementById("login_username").value === "" || document.getElementById('login_password').value === "") {
+        window.alert("Error: All fields must be filled out");
+    } else {
+        let credentials  = { username: document.getElementById("login_username").value, password: document.getElementById('login_password').value };
+        register(JSON.stringify(credentials));
+    }
+});

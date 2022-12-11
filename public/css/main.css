@@ -37,6 +37,7 @@ p{
 
 button{
     font-family: sans-serif;
+    margin: 5px;
 }
 .container, .container-fluid{
     padding: 30px;
