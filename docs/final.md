@@ -178,6 +178,10 @@ Bryan
 - wrote code that connected server to mongo database
 - Assisted in creation of data formats and created relevent collections in MongoDB
 - Assisted in database coding for APIs used by Host Data webpage
+- wrote/coded enumerationmachine.js
+- Integrated the scan feature on the website
+- ensured scan data gets updated and stored
+- added voice input to final video
 
 Wenxiao 
 - Created and coded Enumeration Machnine_LoginPage.html
