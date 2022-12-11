@@ -50,6 +50,9 @@ there be one they know off that is not currenlty in the library. As with previou
 
 ![host_data_page](/public/images/vulnerbility_library_page.JPG)
 
+APIs
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Routes
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Webpage Getters
@@ -74,4 +77,70 @@ Host Data Routes
 Vulnerability Library Routes
 - /vulns/library: This returns a list of everu vulnerability currently in the library. This information is used to populate the "Vulnerability library" section on the Vulnerability Library page
 - /vulns/:string: This takes a user specified vulnerability and adds it to the libarary
+
+Authentication / Authorization
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Our website supports simnple login / register functionality. When a user first accesses the site, they must register for an account. Wehn entering their credentials, it is verified that the username is unqiue before creating the account. These credentials are salted, hashed, and then stored in our mongoDB. When a returning user attempts to login, their credentials are verified by comparing the provided username to the list of accounts, and comparing the provided password's hash with the stored password hash. If they match the user is granted access. Their are no unique views on the site, but user's can only see data from scans they initiated. Their is not "admin permission" account.
+
+
+Division of Labor
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Alex
+- Wrote final draft for ideas.md
+- Wrote Slack post for "Project Ideas"
+- Drew the site wireframe mockup
+- Created and coded hostData.html
+- Wrote milestone-1.md
+- Posted milestone-1 github release
+- Created and configured Heroku app
+- Took Wenxiao's server.js code and converted it in an express app in index.js code
+- Created the right side of the application flow diagram
+- Added code to Enumeration Machnine - Host Data.html to reflect required fields for CRUD updates
+- Created and coded hostData.js
+- Wrote milestone-2.md
+- Posted milestone-2 github release
+- Wrote milestone3.md
+- Create MongoDB database and attached it to Heroku and Github
+- Assisted in creation of data formats and created relevent collections in MongoDB
+- Assisted in database coding for APIs used by Host Data webpage
+- Standardized prexisting code to match format implemented by Bryan
+- Created and coded vulns.html
+- Created and coded vulns.js
+- Coded intial Shodan.io integeration
+- Coded mongoDB Atlas intetgration for hostData.js, vuln.js, and login.js
+- Coded login.js to create site authentication functionality
+- Updated all .html files to have consitent UI apperance
+- Wrote final.md
+- Created project video
+
+Bryan
+- Wrote rought draft of ideas.md
+- Created and coded EnumerationMachine.html
+- Created flow chart for Shodan API
+- Created mongodb database
+- Added function to EnumerationMachine.html
+- Updated EnumerationMachine.html
+- Wrote setup.md
+- Made CRUD operations for host data in server
+- wrote code that connected server to mongo database
+- Assisted in creation of data formats and created relevent collections in MongoDB
+- Assisted in database coding for APIs used by Host Data webpage
+
+Wenxiao 
+- Created and coded Enumeration Machnine_LoginPage.html
+- Created the initial server.js file (converted into an express app in index.js by Alex)
+- Wrote the login page into the flow chart
+- Solved the bug that images cannot be displayed correctly in the index.js file
+- Made CRUD operations for the login page in server
+- Create the release
+- Assisted in database coding for APIs used by Login webpage 
+
+Conclusion
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+For our project, our team wanted to create a security analysis/enumeration tool that allows users to scan hosts remotely for open ports and provide their associated vulnerabilities. Initially, we wanted to enable the user to scan via a single IP, range of IPs, or target port. These scans would then return a threat report and display an overview of a host and its related vulnerabilities. Due to restrictions with node.js and our collective technical knowledge, we had to limit some of the site's functionality. Despite this, our project still reflects most of our initial goals. 
+
+As our group learned, javascript is very limited when accessing remote hosts via anything past a typical web connection (even to test if the port is open). It would require us to rely on timeouts to determine a port’s state, which is questionable at best. To counter this, our group decided to incorporate an external API called Shodan.io, which extends javascript’s base functionality and provides more tools to suit our needs. This created a new problem, as Shodan only allows a certain number of scans per month and doesn't allow scans based on specific ports. This required us to restrict our site to only scan one host at a time to save on our scan “credits” and remove targeted port scanning altogether. We also decided to remove the “remediation guidance” aspect because, in almost all cases, the guidance would be “close the port.” We added the ability to reference a “Vulnerability Database” to replace it, which can be updated by the user to reflect new vulnerabilites.  
+
+Overall, our team learned a lot about the limitations of node.js, and came up with some interesting and effective ways to work around those shortcomings. While the final product isn't as versetile as we orignally set out for it be, it maintains the ability to do almost everything we initally wanted. 
 
