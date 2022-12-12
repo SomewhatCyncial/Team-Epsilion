@@ -7,7 +7,6 @@ const {MongoClient, ConnectionPoolReadyEvent} = require('mongodb');
 const shodan = "https://api.shodan.io/shodan";
 const saltRounds = 10;
 let db = null;
-req.session.user = null;
 
 const server = express();
 server.use(express.static(__dirname + '/public')); //allows import of .css files
@@ -371,6 +370,7 @@ async function main() {
         await client.connect()
         db = client.db('enumeration-machine');
         server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+        req.session.user = null;
     }
     catch(err){
         console.error(err);
