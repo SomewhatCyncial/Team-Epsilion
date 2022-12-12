@@ -1,4 +1,3 @@
-const { response } = require("express");
 const express = require("express");
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -370,7 +369,6 @@ async function main() {
         await client.connect()
         db = client.db('enumeration-machine');
         server.listen(process.env.PORT || 8080, () => console.log("Server is running"));
-        req.session.user = null;
     }
     catch(err){
         console.error(err);
