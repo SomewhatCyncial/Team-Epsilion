@@ -125,14 +125,7 @@ Scan Page APIs
 
 server.post("/scan/:ip", async (req, res) => {
     let ip = req.params.ip;
-    console.log(ip);
-    // let publicIPRegex = /(^0\.)|(^10\.)|(^100\.6[4-9]\.)|(^100\.[7-9]\d\.)|(^100\.1[0-1]\d\.)|(^100\.12[0-7]\.)|(^127\.)|(^169\.254\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.0\.0\.)|(^192\.0\.2\.)|(^192\.88\.99\.)|(^192\.168\.)|(^198\.1[8-9]\.)|(^198\.51\.100\.)|(^203.0\.113\.)|(^22[4-9]\.)|(^23[0-9]\.)|(^24[0-9]\.)|(^25[0-5]\.)/;
-    // if(!publicIPRegex.test(ip)){
-    //     console.log("invalid IP")
-    //     res.json({messsage: "invalid IP"})
-    // }
     let response = await ipChecker(ip);
-    console.log(response); 
     if(response){
         res.json({message: response});
     }
