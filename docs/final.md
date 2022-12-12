@@ -50,9 +50,6 @@ there be one they know off that is not currenlty in the library. As with previou
 
 ![host_data_page](/public/images/vulnerbility_library_page.JPG)
 
-APIs
---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 Database
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Our team used mongoDB Atlas for out database. Our app uses four collections:
